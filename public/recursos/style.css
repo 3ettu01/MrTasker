@@ -1,0 +1,429 @@
+body {
+    background-color: #fbf7f7;
+    overflow: hidden;
+    font-family: 'Karla', sans-serif;
+}
+#body-inicio {
+    background-color: #efd4d4 ;
+}
+
+/* ************* PAGINA LOGIN ************* */
+/* --- BOTON ENTRAR --- */
+.Btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition-duration: .3s;
+    background-color: #8d1811;
+  }
+  
+  /* plus sign */
+  .sign {
+    width: 100%;
+    transition-duration: .3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .iconlogin {
+    font-size: larger;
+    color: white;
+  }
+  /* text */
+  .text {
+    position: absolute;
+    right: 0%;
+    width: 0%;
+    opacity: 0;
+    color: white;
+    font-size: 1.2em;
+    font-weight: 600;
+    transition-duration: .3s;
+  }
+  /* hover effect on button width */
+  .Btn:hover {
+    width: 125px;
+    border-radius: 40px;
+    transition-duration: .3s;
+  }
+  
+  .Btn:hover .sign {
+    width: 30%;
+    transition-duration: .3s;
+    padding-left: 20px;
+  }
+  /* hover effect button's text */
+  .Btn:hover .text {
+    opacity: 1;
+    width: 70%;
+    transition-duration: .3s;
+    padding-right: 10px;
+  }
+  /* button click effect*/
+  .Btn:active {
+    transform: translate(2px ,2px);
+  }
+  /* mobile version (RESPONSIVE) */
+  .btnposition {
+    z-index: 1050;
+  }
+  @media (max-width: 768px) {
+    .btnposition {
+      position: fixed;
+      top: auto;
+      bottom: 20px;
+      right: 50%;
+      transform: translateX(50%);
+    }
+    .Btn {
+      width: 90px;
+      height: 90px;
+    }
+    .iconlogin {
+      font-size: xx-large;
+    }
+    .text {
+      font-size: 1.7em;
+    }
+    #logo {
+      display: flex !important;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 1rem 0;
+    }
+    #imglogo {
+      width: 350px;
+    }
+  }
+  
+
+/* --- FORMULARIOS Y CARDS --- */
+:root {
+  --input-focus: #8d1811;
+  --font-color:rgb(0, 0, 0);
+  --font-color-sub:rgb(0, 0, 0);
+  --bg-color: #efd4d4;
+  --main-color:rgb(0, 0, 0);
+}
+
+.auxiliartext {
+  font-size: smaller;
+  color: var(--font-color);
+}
+
+/* Contenedor general */
+.card-design {
+  background-color: #efd4d4;
+  border-radius: 5px;
+  border: 2px solid var(--main-color);
+  box-shadow: 4px 4px var(--main-color);
+  padding: 30px;
+  max-width: 95%;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.card-wrapper {
+  background-color: #cb6464;
+  border-radius: 5px;
+  border: 2px solid var(--main-color);
+  box-shadow: 4px 4px var(--main-color);
+  padding: 30px;
+  max-width: 350px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.card-btnback {
+  padding: 30px;
+  padding-bottom: 10px;
+  margin: 0 auto;
+  color: #000;
+}
+
+.btn-simple {
+  text-decoration: none;
+  color: #000;
+}
+.btn-simple:hover {
+  font-weight: bold;
+  color: #721c24;
+  transition-duration: 0.5s;
+}
+
+/* Título */
+.card-title {
+  font-size: 25px;
+  font-weight: 900;
+  text-align: center;
+  color: var(--main-color);
+  margin-bottom: 20px;
+}
+
+.card-subtext {
+  font-size: small;
+  font-weight: bold;
+  color: #6b6b6b;
+}
+
+.task-title {
+  font-size: x-large;
+  font-weight: bold;
+}
+.subtask-title {
+  font-size: large;
+  font-weight: bold;
+}
+
+/* Inputs */
+.card-input {
+  width: 100%;
+  height: 40px;
+  border-radius: 5px;
+  border: 2px solid var(--main-color); /* efecto 3d */
+  background-color: var(--bg-color);
+  box-shadow: 4px 4px var(--main-color);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--font-color);
+  padding: 5px 10px;
+  /* margin-bottom: 20px; */
+  margin-top: 20px;
+  outline: none;
+}
+.card-input2 {
+  width: 100%;
+  height: 40px;
+  border-radius: 5px;
+  background-color: white;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--font-color);
+  padding: 5px 10px;
+  /* margin-bottom: 20px; */
+  margin-top: 20px;
+  outline: none;
+}
+
+.btn-check:checked + .btn-textcheck {
+  background-color: #ffffff;
+  color: black;
+}
+
+.card-input::placeholder {
+  color: var(--font-color-sub);
+  opacity: 0.8;
+}
+
+.card-input:focus {
+  border: 2px solid var(--input-focus);
+}
+
+.card-icons {
+  background-color: #fbf7f7;
+  border-radius: 5px;
+  border: 2px solid var(--main-color);
+  box-shadow: 4px 4px var(--main-color);
+  padding: 30px;
+  max-width: 100%;
+  margin: 0 0;
+}
+
+/* Botón */
+.card-button {
+  width: 120px;
+  height: 40px;
+  border-radius: 5px;
+  border: 2px solid var(--main-color);
+  background-color: var(--bg-color);
+  box-shadow: 4px 4px var(--main-color);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--font-color);
+  cursor: pointer;
+  transition: 0.1s;
+}
+
+.card-button:active {
+  box-shadow: 0px 0px var(--main-color);
+  transform: translate(3px, 3px);
+}
+
+.dark-hr {
+  border: none;
+  border-top: 2px solid black;
+  opacity: 1;
+  margin: 2rem 0;
+}
+
+/* ICONOS DE GATOS RADIO BUTTON */
+.cat-icon {
+  max-width: 50px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  border-radius: 1rem;
+}
+
+.cat-icon:hover {
+  transform: scale(1.2);
+}
+
+input[type="radio"]:checked + label img {
+  transform: scale(1.3);
+}
+
+/* ************* PAGINA PRINCIPAL ************* */
+/* MENU */
+
+#menu {
+  background-color: #f1e7e1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 100vh;
+  border-right: 1px solid #c4bdbd;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.menu-content {
+  width: 100%;
+  padding: 20px;
+}
+
+#menu-crear {
+  background-color: #f1e7e1;
+  position: fixed;
+  top: 0;
+  right: 0; /* CAMBIO: antes era left: 0 */
+  width: 300px;
+  height: 100vh;
+  border-left: 1px solid #c4bdbd; /* CAMBIO: antes era border-right */
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.menu-link {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  /* color: #333; */
+  color: black;
+  opacity: 90%;
+  text-decoration: none;
+  font-size: 1.1em;
+  font-weight: 500;
+  border-radius: 50px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.menu-link:hover {
+  background-color: #ebdbd0;
+  /* color: #000; */
+  opacity: 100%;
+  border-radius: 50px;
+}
+
+.principal-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #8d1811;
+  color: #fff;
+  font-size: 1.2em;
+  font-weight: 600;
+  border-radius: 50px;
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  text-decoration: none;
+  width: 100%;
+}
+
+.principal-btn:hover {
+  background-color: #a01e18;
+}
+
+.menu-footer {
+  width: 100%;
+  padding: 20px;
+  margin-top: auto; /* Esto manda el footer al fondo */
+  border-top: 1px solid #c4bdbd;
+}
+
+.logout-link {
+  color: #8d1811; /* Color distinto para destacar */
+  font-weight: 600;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.logout-link:hover {
+  background-color: #f8d7da;
+  color: #721c24;
+  border-radius: 10px;
+}
+
+/* SECCION TAREAS */
+.task-header {
+  border-bottom: 2px solid #ccc;
+  background-color: #fff;
+}
+
+.task-tabs a {
+  text-decoration: none;
+  color: #333;
+  margin-right: 20px;
+  font-weight: 600;
+  font-size: 1em;
+  transition: all 1s ease;
+}
+
+.task-tabs a.active {
+  font-size: x-large;
+  font-weight: bolder;
+  color: #721c24;
+}
+
+.task-tabs a:hover {
+  font-size: x-large;
+  font-weight: bolder;
+  color: #000;
+
+}
+
+.task-filter button {
+  border: none;
+  background: none;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+/* CHECK */
+.custom-checkbox {
+  width: 1.3rem;
+  height: 1.3rem;
+  background-color: #ffffff;
+  border-color: #000000;
+  transition: all 0.3s ease;
+}
+
+.custom-checkbox:checked {
+  background-color: #721c24;
+  border-color: #721c24;
+}
+
+.custom-checkbox:checked:focus {
+  box-shadow: 0 0 0 0.25rem rgba(114, 28, 36, 0.25);
+}
