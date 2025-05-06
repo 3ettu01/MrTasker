@@ -40,51 +40,60 @@
             <div class="pt-5" id="taskslist">
 
                 
-                <div class="card-design p-3"> <!-- modelo task -->
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="d-flex align-items-center">
-                            <input class="form-check-input custom-checkbox" type="checkbox" id="task">
-                            <div>
-                                <span class="ms-3 task-title">Tarea de prueba</span>
-                                <span class="card-subtext">- asignada a Tofi</span>
-                            </div>
-                        </div>
-                        <i class="bi bi-pencil fs-5"></i> 
-                    </div>
+                <!-- task formato extendido -->
+<div class="card-design p-3"> 
+    <div class="d-flex justify-content-between align-items-start row">
+        <div class="d-flex align-items-center col-10">
+            <input class="form-check-input custom-checkbox" type="checkbox" id="task">
+            <div>
+                <span class="ms-2 task-title">Tarea de prueba</span>
+                <span class="card-subtext">- asignada a Tofi</span>
+            </div>
+        </div>
+        <!-- <i class="bi bi-pencil-square"></i> -->
+        <div class="col">
+            <div class="row m-0 p-0 d-flex justify-content-end"> <a href="" class="card-subtext-btn">Editar</a> </div>
+            <div class="row m-0 p-0 d-flex justify-content-end"> <a href="" class="card-subtext-btn">Eliminar</a> </div>
+        </div>
+        
+        
+    </div>
 
-                    <div class="card-subtext mt-1">prioridad x</div>
+    <div class="card-subtext mt-0">prioridad x</div>
 
-                    <p class="mt-2 mb-3 text-dark">
-                        Descripción 
-                    </p>
+    <p class="mt-1 mb-1 text-dark">
+        Descripción 
+    </p>
 
-                    <div class="d-flex justify-content-between">
-                        <span class="card-subtext">Recordatorio para el xx/xx/xx</span>
-                        <span class="card-subtext">Vence el xx/xx/xx</span>
-                    </div>
+    <div class="d-flex justify-content-between">
+        <span class="card-subtext">Recordatorio para el xx/xx/xx</span>
+        <span class="card-subtext">Vence el xx/xx/xx</span>
+    </div>
 
-                    <!-- subtareas -->
-                    <hr>
-                    <div class="ms-4 mt-2">
-                        <div class="mb-3">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div class="d-flex align-items-center">
-                                <input class="form-check-input custom-checkbox" type="checkbox" id="subtask1">
-                                <div>
-                                    <span class="ms-2 subtask-title">Subtarea x</span>
-                                    <span class="card-subtext">- asignada a Milo</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-subtext mt-1">prioridad x</div>
-                        <p class="mt-1 mb-1 text-dark">Descripción</p>
-                        <div class="d-flex justify-content-between">
-                            <span class="card-subtext">Recordatorio para el xx/xx/xx</span>
-                            <span class="card-subtext">Vence el xx/xx/xx</span>
-                        </div>
-                    </div>
+    <!-- subtareas -->
+    <hr>
+    <div class="ms-3 mt-1">
+        <div class="mb-3">
+        <div class="d-flex justify-content-between align-items-start">
+            <div class="d-flex align-items-center">
+                <input class="form-check-input custom-checkbox" type="checkbox" id="subtask1">
+                <div>
+                    <span class="ms-2 subtask-title">Subtarea x</span>
+                    <span class="card-subtext">- asignada a Milo</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-subtext mt-1">prioridad x</div>
+        <p class="mt-0 mb-0 text-dark">Descripción</p>
+        <div class="d-flex justify-content-between">
+            <span class="card-subtext">Recordatorio para el xx/xx/xx</span>
+            <span class="card-subtext">Vence el xx/xx/xx</span>
+        </div>
+    </div>
 
-                </div> <!-- fin modelo task -->
+</div> 
+<!-- fin task -->
+
 
                 
 

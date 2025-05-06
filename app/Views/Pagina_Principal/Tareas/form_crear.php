@@ -41,7 +41,7 @@
                                 'name' => 'titulo', 
                                 'class' => 'card-input2',
                                 'type' => 'text',
-                                'placeholder' => 'Titulo',
+                                'placeholder' => 'Titulo*',
                                 'value' => old('titulo')
                             )); 
                             if (session('errors.titulo')){   ?>
@@ -53,9 +53,9 @@
                             echo form_textarea([
                                 'name' => 'desc',
                                 'class' => 'card-input2',
-                                'placeholder' => 'Descripcion',
+                                'placeholder' => 'Descripcion*',
                                 'value' => old('desc'),
-                                'rows' => 3
+                                'style' => 'height:50px'
                             ]);
                             if (session('errors.desc')) { ?>
                                 <div class="form-text text-light text-end"><?= session('errors.desc') ?></div>
@@ -99,7 +99,7 @@
                         </div>
                         <div class="row p-0 mt-3">
                             <div class="col me-2">
-                                <span class="mt-3">Fecha de vencimiento:</span>
+                                <span class="mt-3">Fecha de vencimiento: *</span>
                                 <?php
                                 echo form_input(array(
                                     'name' => 'fvencimiento', 
@@ -127,12 +127,11 @@
                                 <?php } ?>
                             </div>
                         </div>
-                        <div class=>
-                            <!-- agregar subtarea -->
+                        <!-- <div>
                             <a href="#" role="button" class="btn-simple btn btn-link mt-3" data-bs-toggle="modal" data-bs-target="#Modalsubt">
                                 <i class="bi bi-file-earmark-plus"></i> Añadir subtarea
                             </a>
-                        </div>
+                        </div> -->
                         
                     </div>
                 </div>

@@ -18,13 +18,21 @@
                 
                 <span class="card-title mb-0"> <?= $sesion->get('usernombre') ?> </span>
                 
-                <div class="card-wrapper p-3" style="background-color: #ff9c9c">
-                    <li>
-                        <ul>  </ul>
-                    </li>
+                <div class="card-design p-3 w-50">
+                    <li class="my-1 mx-3">Nombre: <?= $sesion->get('usernombre') ?> </li>
+                    <li class="my-1 mx-3">Email: <?= $sesion->get('useremail') ?> </li>
+                    <div class="m-0 p-0 d-flex justify-content-end">
+                        <a href="#" role="button" class="card-subtext-btn" data-bs-toggle="modal" data-bs-target="#Modaleditp"> 
+                            <i class="bi bi-pencil-square"></i> Modificar datos 
+                        </a>
+                    </div>
+                    <hr>
+                    <span class="card-subtext">Tareas creadas: 0</span> <br>
+                    <span class="card-subtext">Tareas terminadas: 0</span>
                 </div>
             </div>
         </div>
     </div>
+    <?php echo view('Pagina_Principal/Perfil/form_modal_edit.php') ?>
 </body>
 </html>
