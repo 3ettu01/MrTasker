@@ -140,6 +140,12 @@ class Controlador extends BaseController {
     function get_perfil() {
         return view('Pagina_Principal/Perfil/index.php');
     }
+
+    public function cerrar_sesion() {
+        $sesion = session();
+        $sesion->destroy();
+        return redirect()->to(base_url('/'));
+    }
 }
 
 ?>

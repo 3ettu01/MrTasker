@@ -28,7 +28,7 @@
         </nav>
     </div>
     <div class="menu-footer">
-        <a href="#" class="menu-link logout-link">
+        <a href="<?= base_url('/Cerrar'); ?>" class="menu-link logout-link">
             <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
         </a>
     </div>

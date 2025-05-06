@@ -11,6 +11,8 @@ $routes->get('/', 'Controlador::index');
 $routes->get('/Tareas', 'Controlador::get_index');
 $routes->get('/Crear', 'Controlador::get_crear_tarea');
 $routes->get('/Perfil', 'Controlador::get_perfil');
+$routes->get('/Cerrar', 'Controlador::cerrar_sesion');
+
 // los formularios se hacen por post
 $routes->post('form/login', 'Controlador::login');
 $routes->post('form/registro', 'Controlador::registro');

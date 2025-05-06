@@ -136,7 +136,7 @@ body {
   border-radius: 5px;
   border: 2px solid var(--main-color);
   box-shadow: 4px 4px var(--main-color);
-  padding: 30px;
+  padding: 20px;
   max-width: 350px;
   width: 100%;
   margin: 0 auto;
@@ -172,6 +172,13 @@ body {
   font-size: small;
   font-weight: bold;
   color: #6b6b6b;
+}
+
+.card-subtext-btn {
+  font-size: small;
+  font-weight: bold;
+  text-decoration: none;
+  color: #242424;
 }
 
 .task-title {
