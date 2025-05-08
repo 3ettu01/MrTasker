@@ -126,7 +126,7 @@
 <script>
         window.addEventListener('DOMContentLoaded', function () {
         <?php 
-        if (session('errors.sub_titulo')||session('errors.sub_desc')||session('errors.sub_fvencimiento'||session('errors.sub_frecordatorio'))) { ?>
+        if (session('errors.sub_titulo')||session('errors.sub_desc')||session('errors.sub_fvencimiento')||session('errors.sub_frecordatorio')) { ?>
             var modal = new bootstrap.Modal(document.getElementById('Modalsubt'));
             modal.show();
         <?php }  ?>

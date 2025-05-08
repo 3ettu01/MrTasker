@@ -1,7 +1,14 @@
 <div class="row align-items-start">
     <div class="col-10 d-flex align-items-center">
-        <h4 class="me-1"><i class="bi bi-chevron-right"></i> <?= $tarea['tema'] ?> </h4>
-        <!-- <span class="card-subtext">- asignada a Tofi</span> -->
+        
+        <?php if ($tarea['prioridad']=='a'): ?>
+            <h4 class="me-1"><i class="bi bi-chevron-right"></i> <b> <?= $tarea['tema'] ?> </b> <i class="bi bi-exclamation-diamond"></i> </h4>
+        <?php else: ?>
+            <h4 class="me-1"><i class="bi bi-chevron-right"></i> <?= $tarea['tema'] ?> </h4>
+        <?php endif; ?>
+
+        <span class="card-subtext-btn"> - <?= $tarea['estadotxt'] ?> </span>
+        <!-- <span class="card-subtext ms-1">- asignada a Tofi</span> -->
     </div>
     <div class="col-2 d-flex flex-column align-items-end">
         <a href="" class="card-subtext-btn">Editar</a>

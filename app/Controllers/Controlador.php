@@ -132,14 +132,15 @@ class Controlador extends BaseController {
             'titulo' => 'required|min_length[2]',
             'desc' => 'required',
             'fvencimiento' => 'required|check_future_date',
-            'frecordatorio' => 'check_future_date'
+            'frecordatorio' => 'check_future_date|reminder_before_due'
             ] , [
             'titulo' => ['required' => 'El titulo es obligatorio',
                         'min_length' => 'El titulo es demasiado corto'] ,
             'desc' => ['required' => 'Añada una descripcion'] ,
             'fvencimiento' => ['required' => 'La fecha de vencimiento es obligatoria',
                         'check_future_date' => 'Fecha no valida'] ,
-            'frecordatorio' => ['check_future_date' => 'Fecha no valida']
+            'frecordatorio' => ['check_future_date' => 'Fecha invalida',
+                                'reminder_before_due' => 'Fecha invalida: no puede ser posterior al vencimiento']
             ]);
         if (!$validar -> withRequest($this->request) -> run()) {
             return redirect() -> back() -> withInput() -> with('errors',$validar->getErrors());
@@ -178,14 +179,15 @@ class Controlador extends BaseController {
             'sub_titulo' => 'required|min_length[2]',
             'sub_desc' => 'required',
             'sub_fvencimiento' => 'required|check_future_date',
-            'sub_frecordatorio' => 'check_future_date'
+            'sub_frecordatorio' => 'check_future_date|sub_reminder_before_due'
             ] , [
             'sub_titulo' => ['required' => 'El titulo es obligatorio',
                         'min_length' => 'El titulo es demasiado corto'] ,
             'sub_desc' => ['required' => 'Añada una descripcion'] ,
             'sub_fvencimiento' => ['required' => 'La fecha de vencimiento es obligatoria',
                         'check_future_date' => 'Fecha no valida'] ,
-            'sub_frecordatorio' => ['check_future_date' => 'Fecha no valida']
+            'sub_frecordatorio' => ['check_future_date' => 'Fecha invalida',
+                                    'sub_reminder_before_due' => 'Invalida: no puede ser posterior al vencimiento']
             ]);
         if (!$validar -> withRequest($this->request) -> run()) {
             return redirect() -> back() -> withInput() -> with('errors',$validar->getErrors());
@@ -223,9 +225,9 @@ class Controlador extends BaseController {
             'a' => 'alta'
         ];
         $estado = [ 
-            'd' => 'definido',
-            'e' => 'en proceso',
-            'f' => 'finalizado'
+            'd' => 'DEFINIDA',
+            'e' => 'EN PROCESO',
+            'c' => 'COMPLETADA'
         ];
         $color = [
             1 => '#9ac8ff',
