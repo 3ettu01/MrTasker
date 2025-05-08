@@ -21,7 +21,7 @@
                                 'value' => old('sub_titulo')
                             )); 
                             if (session('errors.sub_titulo')){   ?>
-                                <div class="form-text text-light text-end"><?= session('errors.sub_titulo') ?></div>
+                                <div class="form-text text-dark text-end"><?= session('errors.sub_titulo') ?></div>
                             <?php } ?>
                     </div>
                     <div class="row form-floating px-3">
@@ -34,7 +34,7 @@
                                 'style' => 'height:100px'
                             ]);
                             if (session('errors.sub_desc')) { ?>
-                                <div class="form-text text-light text-end"><?= session('errors.sub_desc') ?></div>
+                                <div class="form-text text-dark text-end"><?= session('errors.sub_desc') ?></div>
                             <?php } ?>
                     </div>
                     <div>
@@ -84,7 +84,7 @@
                                     'value' => old('sub_fvencimiento')
                                 )); 
                                 if (session('errors.sub_fvencimiento')){   ?>
-                                    <div class="form-text text-light text-end"><?= session('errors.sub_fvencimiento') ?></div>
+                                    <div class="form-text text-dark text-end"><?= session('errors.sub_fvencimiento') ?></div>
                                 <?php } ?>
                         </div>
                         <div class="col ms-2">
@@ -97,7 +97,7 @@
                                     'value' => old('sub_frecordatorio')
                                 )); 
                                 if (session('errors.sub_frecordatorio')){   ?>
-                                    <div class="form-text text-light text-end"><?= session('errors.sub_frecordatorio') ?></div>
+                                    <div class="form-text text-dark text-end"><?= session('errors.sub_frecordatorio') ?></div>
                                 <?php } ?>
                         </div>
                     </div>

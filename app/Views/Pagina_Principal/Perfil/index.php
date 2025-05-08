@@ -18,19 +18,19 @@
                     <img src="<?= base_url('public/recursos/img/iconsuser/cat'.$sesion->get('usericon').'.png') ?>" alt="" width="120" class="pt-3">
                 </div>
                 
-                <span class="card-title mb-0"> <?= $sesion->get('usernombre') ?> </span>
+                <span class="card-title mb-0"> <?= $user_datos['nombre'] ?> </span>
                 
                 <div class="card-design p-3 w-50">
-                    <li class="my-1 mx-3">Nombre: <?= $sesion->get('usernombre') ?> </li>
-                    <li class="my-1 mx-3">Email: <?= $sesion->get('useremail') ?> </li>
+                    <li class="my-1 mx-3">Nombre: <?= $user_datos['nombre'] ?> </li>
+                    <li class="my-1 mx-3">Email: <?= $user_datos['email'] ?> </li>
                     <div class="m-0 p-0 d-flex justify-content-end">
                         <a href="#" role="button" class="card-subtext-btn" data-bs-toggle="modal" data-bs-target="#Modaleditp"> 
                             <i class="bi bi-pencil-square"></i> Modificar datos 
                         </a>
                     </div>
                     <hr>
-                    <span class="card-subtext">Tareas creadas: 0</span> <br>
-                    <span class="card-subtext">Tareas terminadas: 0</span>
+                    <span class="card-subtext">Tareas creadas: <?= $tareas_creadas ?> </span> <br>
+                    <span class="card-subtext">Tareas completadas: <?= $tareas_terminadas ?> </span>
                 </div>
             </div>
         </div>

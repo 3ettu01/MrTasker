@@ -253,14 +253,59 @@ class Controlador extends BaseController {
         ]);
     }
 
+    public function editperfil() {
+        $sesion = session();
+        $userid = $sesion->get('userid');
+
+        $validar = service('validation');
+        $validar -> setRules ([
+            'editnombre' => 'required|min_length[3]',
+            'editemail' => "required|valid_email|is_unique[usuarios.email,id,{$userid}]"
+            ] , [
+            'editnombre' => ['required' => 'El nombre es obligatorio',
+                        'min_length' => 'El nombre es demasiado corto'] ,
+            'editemail' => ['required' => 'El correo es obligatorio',
+                        'valid_email' => 'El correo no es valido',
+                        'is_unique' => 'El correo ya existe'] 
+            ]);
+        if (!$validar -> withRequest($this->request) -> run()) {
+            return redirect() -> back() -> withInput() -> with('errors',$validar->getErrors());
+        }
+
+        $usuarioM = new \App\Models\UsuarioModel();
+        $usuarioM->update($userid, [
+            'nombre' => $this->request->getPost('editnombre'),
+            'email' => $this->request->getPost('editemail')
+        ]);
+
+        // actualizar sesion
+        $sesion->set('usernombre', $this->request->getPost('editnombre'));
+        $sesion->set('useremail', $this->request->getPost('editemail'));
+
+        return redirect()->back()->with('success', 'Perfil actualizado');
+    }
+
     function get_index() {
         return view('Pagina_Principal/index');
     }
     function get_crear_tarea() {
         return view('Pagina_Principal/Tareas/form_crear.php');
     }
-    function get_perfil() {
-        return view('Pagina_Principal/Perfil/index.php');
+    function get_perfil(){
+        $sesion = session();
+        $userid = $sesion->get('userid');
+
+        $tareaM = new \App\Models\TareaModel();
+        $userM = new \App\Models\UsuarioModel();
+        $tareas_creadas = $tareaM->where('iddueño', $userid)->countAllResults();
+        $tareas_terminadas = $tareaM->where(['iddueño' => $userid, 'estado' => 'c'])->countAllResults();
+    
+        return view('Pagina_Principal/Perfil/index', [
+            'tareas_creadas' => $tareas_creadas,
+            'tareas_terminadas' => $tareas_terminadas,
+            'user_datos' => ['nombre' => $sesion->get('usernombre') , 'email' => $sesion->get('useremail')]
+        ]);
+
     }
 
     public function cerrar_sesion() {

@@ -4,23 +4,51 @@
             <div class="modal-body d-flex justify-content-center align-items-center p-4">
 
                 <!-- Contenedor -->
-                <form class="g-0 card-design w-50">
-                    
+                <?php echo form_open('form/editperfil', ['id' => 'form_editperfil',
+                                                        'class' => 'g-0 card-design w-50']); ?>
                     <div class="row">
-                        <input type="text" placeholder="Nombre anterior xd" class="card-input" name="editnombre" />
+                        <?php echo form_input(array(
+                            'name' => 'editnombre', 
+                            'class' => 'card-input',
+                            'type' => 'text',
+                            'value' => $user_datos['nombre'],
+                            'placeholder' => 'Nombre'
+                        ));
+                        if (session('errors.editnombre')){   ?>
+                            <div class="form-text text-dark text-end"><?= session('errors.editnombre') ?></div>
+                        <?php } ?>
                     </div>
                     <div class="row">
-                        <input type="text" placeholder="email anterior xd" class="card-input" name="editemail" />
+                        <?php echo form_input(array(
+                            'name' => 'editemail', 
+                            'class' => 'card-input',
+                            'type' => 'text',
+                            'value' => $user_datos['email'],
+                            'placeholder' => 'email'
+                        ));
+                        if (session('errors.editemail')){   ?>
+                            <div class="form-text text-dark text-end"><?= session('errors.editemail') ?></div>
+                        <?php } ?>
                     </div>
                     <div class="d-flex justify-content-center">
-                        <button type="submit" class="card-button w-50 mt-3 text-white" style="background-color: #802b1a;">
+                        <button type="submit" class="card-button w-50 mt-3 text-white" onclick="document.getElementById('form_editperfil').submit();" style="background-color: #802b1a;">
                             Editar
                         </button>
                     </div>
                     </div>
-                </form>
+                <?php echo form_close(); ?>
 
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    window.addEventListener('DOMContentLoaded', function () {
+        <?php 
+        if (session('errors.editnombre')||session('errors.editemail')) { ?>
+            var modal = new bootstrap.Modal(document.getElementById('Modaleditp'));
+            modal.show();
+        <?php } ?>
+    });
+</script>

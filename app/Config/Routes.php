@@ -19,3 +19,4 @@ $routes->post('form/login', 'Controlador::login');
 $routes->post('form/registro', 'Controlador::registro');
 $routes->post('form/creart', 'Controlador::tarea');
 $routes->post('form/crearsubt/(:num)', 'Controlador::subtarea/$1');
+$routes->post('form/editperfil', 'Controlador::editperfil');
