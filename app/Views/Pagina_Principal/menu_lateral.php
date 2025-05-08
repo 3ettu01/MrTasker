@@ -16,7 +16,7 @@
         <hr>
 
         <nav class="nav flex-column">
-            <a href="<?= base_url('/Tareas') ?>" class="menu-link">
+            <a href="<?= base_url('/') ?>" class="menu-link">
             <i class="bi bi-stickies-fill me-2"></i> Tareas
             </a>
             <a href="<?= base_url('/Perfil') ?>" class="menu-link">

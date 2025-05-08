@@ -243,8 +243,6 @@
             </div>
         <?php echo form_close(); ?>
     </div>
-    
-    <?php echo view('Pagina_Principal/Tareas/form_crear_subt') ?>
 
     <script>
     // Cambia el color de la tarjeta principal al seleccionar un color
@@ -254,14 +252,6 @@
             const cardWrapper = document.getElementById('tarea');
             cardWrapper.style.backgroundColor = color;
         });
-    });
-
-    // Copia el color de fondo del formulario principal al modal al abrirlo
-    const modalSubt = document.getElementById('Modalsubt');
-    modalSubt.addEventListener('show.bs.modal', function () {
-        const color = document.getElementById('tarea').style.backgroundColor;
-        const subtareaCard = document.getElementById('subtarea-card');
-        subtareaCard.style.backgroundColor = color;
     });
 </script>
 

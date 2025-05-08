@@ -1,11 +1,50 @@
 <?php
 namespace App\Controllers;
 use CodeIgniter\Controller;
+use App\Models\TareaModel;
+use App\Models\SubtareaModel;
+use App\Models\UsuarioModel;
 
 class Controlador extends BaseController {
     function index() {
 
-        return view ('Login_Registro/index');
+        $sesion = session();
+
+        if (!$sesion->has('userid')) {
+            return view ('Login_Registro/index');
+        }
+
+        $tareaM = new TareaModel();
+        $subtareaM = new SubtareaModel();
+
+        $tareas = $tareaM
+            ->where('iddueño', $sesion->get('userid'))
+            ->orderBy("FIELD(prioridad, 'a', 'm', 'b')", '', false) 
+            ->orderBy('fvencimiento', 'ASC') 
+            ->findAll();
+    
+        $prioridad = [
+            'b' => 'baja',
+            'm' => 'media',
+            'a' => 'alta'
+        ];
+        $color = [
+            1 => '#9ac8ff',
+            2 => '#96db9d',
+            3 => '#ff9c9c',
+            4 => '#ffe885',
+            5 => '#d29fd6'
+        ];
+
+        foreach ($tareas as &$tarea) {
+            $tarea['cantsubtareas'] = $subtareaM
+                ->where('idtarea', $tarea['id'])
+                ->countAllResults();
+            $tarea['prioridadtxt'] = $prioridad[$tarea['prioridad']];
+            $tarea['colorcod'] = $color[$tarea['color']];
+        }
+
+        return view('Pagina_Principal/index', ['tareas' => $tareas]);
     }
     public function __construct() {
         helper('form');
@@ -43,10 +82,9 @@ class Controlador extends BaseController {
             'usernombre' => $user['nombre'],
             'useremail' => $user['email'],
             'usericon' => $user['icono'],
-            'logged' => true,
         ]);
         //retornar a la pagina
-        return redirect()->to(base_url('/Tareas'));
+        return redirect()->to(base_url('/'));
     }
     public function registro(){
         $validar = service('validation');
@@ -84,23 +122,25 @@ class Controlador extends BaseController {
             'usernombre' => $user['nombre'],
             'useremail' => $user['email'],
             'usericon' => $user['icono'],
-            'logged' => true,
         ]);
         //retornar a la pagina
-        return redirect()->to(base_url('/Tareas'));
+        return redirect()->to(base_url('/'));
     }
     public function tarea(){
         $validar = service('validation');
         $validar -> setRules ([
             'titulo' => 'required|min_length[2]',
             'desc' => 'required',
-            'fvencimiento' => 'required' //fecha valida??? 
+            'fvencimiento' => 'required|check_future_date',
+            'frecordatorio' => 'check_future_date'
             ] , [
             'titulo' => ['required' => 'El titulo es obligatorio',
                         'min_length' => 'El titulo es demasiado corto'] ,
             'desc' => ['required' => 'Añada una descripcion'] ,
-            'fvencimiento' => ['required' => 'La fecha de vencimiento es obligatoria']
-        ]);
+            'fvencimiento' => ['required' => 'La fecha de vencimiento es obligatoria',
+                        'check_future_date' => 'Fecha no valida'] ,
+            'frecordatorio' => ['check_future_date' => 'Fecha no valida']
+            ]);
         if (!$validar -> withRequest($this->request) -> run()) {
             return redirect() -> back() -> withInput() -> with('errors',$validar->getErrors());
         }
@@ -128,7 +168,89 @@ class Controlador extends BaseController {
         $save_bdd = new \App\Models\TareaModel();
         $save_bdd -> insert($datos_registro);
 
-        return redirect()->to(base_url('/Tareas'));
+        $idtarea = $save_bdd->insertID(); //obtengo el id de la tarea recien creada
+
+        return redirect()->to(base_url('/tareas/ver/'. $idtarea));
+    }
+    public function subtarea($idtarea){
+        $validar = service('validation');
+        $validar -> setRules ([
+            'sub_titulo' => 'required|min_length[2]',
+            'sub_desc' => 'required',
+            'sub_fvencimiento' => 'required|check_future_date',
+            'sub_frecordatorio' => 'check_future_date'
+            ] , [
+            'sub_titulo' => ['required' => 'El titulo es obligatorio',
+                        'min_length' => 'El titulo es demasiado corto'] ,
+            'sub_desc' => ['required' => 'Añada una descripcion'] ,
+            'sub_fvencimiento' => ['required' => 'La fecha de vencimiento es obligatoria',
+                        'check_future_date' => 'Fecha no valida'] ,
+            'sub_frecordatorio' => ['check_future_date' => 'Fecha no valida']
+            ]);
+        if (!$validar -> withRequest($this->request) -> run()) {
+            return redirect() -> back() -> withInput() -> with('errors',$validar->getErrors());
+        }
+        
+        //guardo en la bdd
+        $datos_registro = array('idtarea' =>  $idtarea,
+                                'tema' => $this->request->getPost('sub_titulo'), 
+                                'descripcion' => $this->request->getPost('sub_desc'), 
+                                'prioridad' =>  $this->request->getPost('sub_priori'),
+                                'estado' => 'd',
+                                'fvencimiento' => $this->request->getPost('sub_fvencimiento'),
+                                'frecordatorio' => $this->request->getPost('sub_frecordatorio'),
+                                'comentario' => $this->request->getPost('sub_com'));
+        $save_bdd = new \App\Models\SubtareaModel();
+        $save_bdd -> insert($datos_registro);
+
+        return redirect()->to(base_url('/tareas/ver/'. $idtarea));
+    }
+    public function ver($id){
+        if (!session()->get('userid')) { //control para no entrar sin sesion
+            return redirect()->to('/');
+        }
+        $tareaM = new TareaModel();
+        $subtareaM = new SubtareaModel();
+        $tarea = $tareaM->find($id);
+
+        if (!$tarea) { //control
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Tarea no encontrada");
+        }
+
+        $prioridad = [
+            'b' => 'baja',
+            'm' => 'media',
+            'a' => 'alta'
+        ];
+        $estado = [ 
+            'd' => 'definido',
+            'e' => 'en proceso',
+            'f' => 'finalizado'
+        ];
+        $color = [
+            1 => '#9ac8ff',
+            2 => '#96db9d',
+            3 => '#ff9c9c',
+            4 => '#ffe885',
+            5 => '#d29fd6'
+        ];
+        $tarea['prioridadtxt'] = $prioridad[$tarea['prioridad']];
+        $tarea['colorcod'] = $color[$tarea['color']];
+        $tarea['estadotxt'] = $estado[$tarea['estado']];
+
+        $subtareas = $subtareaM
+                    ->where('idtarea', $id)
+                    ->orderBy("FIELD(prioridad, 'a', 'm', 'b')", '', false)
+                    ->findAll();
+
+        foreach ($subtareas as &$sub) {
+            $sub['prioridadtxt'] = $prioridad[$sub['prioridad']];
+        }
+
+        return view('Pagina_Principal/Tareas/ver', [
+            'tarea' => $tarea,
+            'subtareas' => $subtareas
+        ]);
     }
 
     function get_index() {
