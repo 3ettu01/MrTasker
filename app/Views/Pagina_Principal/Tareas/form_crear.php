@@ -21,7 +21,7 @@
             <div class="row align-items-end">
                 <div class="col-2">
                 <!-- btn regresar -->
-                    <a href="<?= base_url('/Tareas') ?>" class="btn-simple fs-4"> <i class="bi bi-arrow-left-circle"></i> </a>
+                    <a href="<?= base_url('/') ?>" class="btn-simple fs-4"> <i class="bi bi-arrow-left-circle"></i> </a>
                 </div>
                 <div class="col-10 d-flex justify-content-center">
                     <h5 class="w-100 text-center">Nueva tarea</h5>

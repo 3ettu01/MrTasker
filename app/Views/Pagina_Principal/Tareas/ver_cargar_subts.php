@@ -1,26 +1,25 @@
 <?php foreach ($subtareas as $sub) : ?>
 
-    <div class="row align-items-start">
-        <div class="col-10 d-flex align-items-center">
-            <input class="form-check-input custom-checkbox me-2" type="checkbox" id="subtask1">
-            <span class="subtask-title me-2 pt-2"> <?= $sub['tema'] ?> </span>
-            <!-- <span class="card-subtext pt-2">- asignada a Milo</span> -->
-        </div>
-        <div class="col-2 d-flex flex-column align-items-end">
-            <a href="" class="card-subtext-btn">Editar</a>
-            <a href="" class="card-subtext-btn">Eliminar</a>
-        </div>
-    </div>
     <div class="row w-100 mt-2">
         <div class="col-10">
+            <input class="form-check-input custom-checkbox me-2" type="checkbox" id="subtask1">
+            <?php if ($sub['prioridad']=='a'): ?>
+                    <span class="subtask-title me-2 pt-2"> <b> <?= $sub['tema'] ?> </b> <i class="bi bi-exclamation-diamond-fill"></i> </span>
+                <?php else: ?>
+                    <span class="subtask-title me-2 pt-2"> <?= $sub['tema'] ?> </span>
+                <?php endif; ?>
+            
+            <!-- <span class="card-subtext pt-2">- asignada a Milo</span> -->
             <div class="card-subtext mt-0">Prioridad <?= $sub['prioridadtxt'] ?></div>
-            <p class="my-0 text-dark"><?= $sub['descripcion'] ?></p>
+            <p class="m-0 text-dark"><?= $sub['descripcion'] ?></p>
             <?php if (!empty($sub['comentario'])): ?>
-                <span class="card-subtext">Comentario: <?= $sub['comentario'] ?> </span>
+                <span class="card-subtext-btn">Comentario: <?= $sub['comentario'] ?> </span>
             <?php endif; ?>
         </div>
 
         <div class="col-2 d-flex flex-column justify-content-end align-items-end p-0" style="min-height: 100%;">
+        <a href="" class="card-subtext-btn">Editar</a>
+        <a href="" class="card-subtext-btn">Eliminar</a>
             <?php if (!empty($sub['frecordatorio'])): ?>
                 <span class="card-subtext"> <i class="bi bi-bell-fill"></i> <?= $sub['frecordatorio'] ?> </span>
             <?php endif; ?>

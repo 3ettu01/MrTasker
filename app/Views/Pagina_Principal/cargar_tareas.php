@@ -10,7 +10,11 @@
     <div class="d-flex justify-content-between align-items-start">
         <div class="d-flex align-items-center">
             <h4 class="me-1">
-                <i class="bi bi-chevron-right"></i> <?= $tarea['tema'] ?>
+                <?php if ($tarea['prioridad']=='a'): ?>
+                    <i class="bi bi-chevron-right"></i> <b> <?= $tarea['tema'] ?> </b> <i class="bi bi-exclamation-diamond"></i>
+                <?php else: ?>
+                    <i class="bi bi-chevron-right"></i> <?= $tarea['tema'] ?>
+                <?php endif; ?>
             </h4>
         </div>
         <a href="<?= base_url('tareas/ver/' . $tarea['id']) ?>" class="card-title p-0 m-0">
