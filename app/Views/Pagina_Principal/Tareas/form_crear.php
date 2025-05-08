@@ -45,7 +45,7 @@
                                 'value' => old('titulo')
                             )); 
                             if (session('errors.titulo')){   ?>
-                                <div class="form-text text-light text-end"><?= session('errors.titulo') ?></div>
+                                <div class="form-text text-dark text-end"><?= session('errors.titulo') ?></div>
                             <?php } ?>
                         </div>
                         <div class="row form-floating">
@@ -58,7 +58,7 @@
                                 'style' => 'height:50px'
                             ]);
                             if (session('errors.desc')) { ?>
-                                <div class="form-text text-light text-end"><?= session('errors.desc') ?></div>
+                                <div class="form-text text-dark text-end"><?= session('errors.desc') ?></div>
                             <?php } ?>
                         </div>
                         <div>
@@ -109,7 +109,7 @@
                                     'value' => old('fvencimiento')
                                 )); 
                                 if (session('errors.fvencimiento')){   ?>
-                                    <div class="form-text text-light text-end"><?= session('errors.fvencimiento') ?></div>
+                                    <div class="form-text text-dark text-end"><?= session('errors.fvencimiento') ?></div>
                                 <?php } ?>
                             </div>
                             <div class="col ms-2">
@@ -123,7 +123,7 @@
                                     'value' => old('frecordatorio')
                                 )); 
                                 if (session('errors.frecordatorio')){   ?>
-                                    <div class="form-text text-light text-end"><?= session('errors.frecordatorio') ?></div>
+                                    <div class="form-text text-dark text-end"><?= session('errors.frecordatorio') ?></div>
                                 <?php } ?>
                             </div>
                         </div>

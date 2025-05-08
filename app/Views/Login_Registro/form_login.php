@@ -10,22 +10,18 @@
         'placeholder' => 'Correo',
         'value' => old('email') //para mantener el input en caso de error
     ));
-    ?>
-        <?php if (session('errors.email')){   ?>
-            <div class="form-text text-light text-end"><?= session('errors.email') ?></div>
-        <?php } ?>
-
-            <?php
+     if (session('errors.email')){   ?>
+        <div class="form-text text-light text-end"><?= session('errors.email') ?></div>
+    <?php } 
     echo form_input(array(
         'name' => 'pass', 
         'class' => 'card-input',
         'type' => 'password',
         'placeholder' => 'Contraseña'
     ));
-    ?>
-        <?php if (session('errors.pass')){   ?>
-            <div class="form-text text-light text-end"><?= session('errors.pass') ?></div>
-        <?php } ?>
+     if (session('errors.pass')){   ?>
+        <div class="form-text text-light text-end"><?= session('errors.pass') ?></div>
+    <?php } ?>
             
     <button type="submit" class="card-button mt-4" onclick="document.getElementById('form_login').submit();">Entrar</button>
     <?php echo form_close(); ?>
