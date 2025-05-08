@@ -1,6 +1,6 @@
 body {
     background-color: #fbf7f7;
-    overflow: hidden;
+    overflow: auto;
     font-family: 'Karla', sans-serif;
 }
 #body-inicio {
@@ -187,7 +187,6 @@ body {
 }
 .subtask-title {
   font-size: large;
-  font-weight: bold;
 }
 
 /* Inputs */
@@ -385,7 +384,6 @@ input[type="radio"]:checked + label img {
 /* SECCION TAREAS */
 .task-header {
   border-bottom: 2px solid #ccc;
-  background-color: #fff;
 }
 
 .task-tabs a {
