@@ -17,7 +17,7 @@
 
             <!-- regresar -->
             <div class="w-100 mb-2 ms-5 d-flex justify-content-between">
-                <a href="<?= base_url('/') ?>" class="btn-simple fs-4 ms-1"> <i class="bi bi-arrow-left-circle"></i> </a>
+                <a href="<?= base_url('/tareas/estado/'.$tarea['estado']) ?>" class="btn-simple fs-4 ms-1"> <i class="bi bi-arrow-left-circle"></i> </a>
                 <!-- ICONOS COLABORADORES?? -->
             </div>
 

@@ -8,11 +8,14 @@ use CodeIgniter\Router\RouteCollection;
 // $routes->get('/', 'Home::index');
 $routes->get('/', 'Controlador::index');
 
-$routes->get('/Tareas', 'Controlador::get_index');
+// $routes->get('/Tareas', 'Controlador::get_index'); // descartado
 $routes->get('/Crear', 'Controlador::get_crear_tarea');
 $routes->get('/Perfil', 'Controlador::get_perfil');
 $routes->get('/Cerrar', 'Controlador::cerrar_sesion');
 $routes->get('/tareas/ver/(:num)', 'Controlador::ver/$1');
+$routes->get('/tareas/estado/(:alpha)', 'Controlador::index/$1');
+$routes->get('/tareas/ordenar/(:alpha)/(:alpha)', 'Controlador::ordenar/$1/$2');
+
 
 // los formularios se hacen por post
 $routes->post('form/login', 'Controlador::login');
