@@ -27,7 +27,7 @@
             <div class="card-subtext mt-0">Prioridad <?= $sub['prioridadtxt'] ?></div>
             <p class="m-0 text-dark"><?= $sub['descripcion'] ?></p>
             <?php if (!empty($sub['comentario'])): ?>
-                <span class="card-subtext-btn">Comentario: <?= $sub['comentario'] ?> </span>
+                <span class="card-subtext-btn">Nota: <?= $sub['comentario'] ?> </span>
             <?php endif; ?>
         </div>
 

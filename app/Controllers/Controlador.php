@@ -6,7 +6,7 @@ use App\Models\SubtareaModel;
 use App\Models\UsuarioModel;
 
 class Controlador extends BaseController {
-    function index() {
+    function index($filtroestado = 'p') {
 
         $sesion = session();
 
@@ -19,6 +19,7 @@ class Controlador extends BaseController {
 
         $tareas = $tareaM
             ->where('iddueño', $sesion->get('userid'))
+            ->where('estado', $filtroestado)
             ->orderBy("FIELD(prioridad, 'a', 'm', 'b')", '', false) 
             ->orderBy('fvencimiento', 'ASC') 
             ->findAll();
@@ -44,7 +45,10 @@ class Controlador extends BaseController {
             $tarea['colorcod'] = $color[$tarea['color']];
         }
 
-        return view('Pagina_Principal/index', ['tareas' => $tareas]);
+        return view('Pagina_Principal/index', [
+            'tareas' => $tareas,
+            'estadoactual' => $filtroestado
+        ]);
     }
     public function __construct() {
         helper('form');
@@ -316,6 +320,74 @@ class Controlador extends BaseController {
         $tareaM->update($idtarea, ['estado' => $nuevoEstadoTarea]);
 
         return redirect()->to(base_url('tareas/ver/' . $idtarea));
+    }
+    public function filtrarestado($estado = 'p') {
+        if (!session()->get('userid')) {
+            return redirect()->to('/');
+        }
+
+        $tareaM = new \App\Models\TareaModel();
+
+        $tareas = $tareaM
+            ->where('userid', session()->get('userid'))
+            ->where('estado', $estado)
+            ->findAll();
+
+        $estadotxt = [
+            'd' => 'definido',
+            'p' => 'en proceso',
+            'c' => 'completado'
+        ];
+
+        return view('Pagina_Principal/index', [
+            'tareas' => $tareas,
+            'estadoactual' => $estadotxt[$estado] ?? 'en proceso'
+        ]);
+
+    }
+    public function ordenar ($estado, $orden) {
+        $sesion = session();
+        if (!$sesion->has('userid')) {
+            return redirect()->to('/');
+        }
+
+        $tareaM = new TareaModel();
+        $subtareaM = new SubtareaModel();
+
+        $query = $tareaM->where('iddueño', $sesion->get('userid'))
+                        ->where('estado', $estado);
+
+        switch ($orden) {
+            case 'antiguos':
+                $query->orderBy('fvencimiento', 'ASC');
+                break;
+            case 'prioridadalta':
+                $query->orderBy("FIELD(prioridad, 'a', 'm', 'b')", '', false);
+                break;
+            case 'prioridadbaja':
+                $query->orderBy("FIELD(prioridad, 'b', 'm', 'a')", '', false);
+                break;
+            case 'recientes':
+                $query->orderBy('fvencimiento', 'DESC');
+                break;
+        }
+
+        $tareas = $query->findAll();
+
+        $prioridad = ['b' => 'baja', 'm' => 'media', 'a' => 'alta'];
+        $color = [1 => '#9ac8ff', 2 => '#96db9d', 3 => '#ff9c9c', 4 => '#ffe885', 5 => '#d29fd6'];
+
+        foreach ($tareas as &$tarea) {
+            $tarea['cantsubtareas'] = $subtareaM->where('idtarea', $tarea['id'])->countAllResults();
+            $tarea['prioridadtxt'] = $prioridad[$tarea['prioridad']];
+            $tarea['colorcod'] = $color[$tarea['color']];
+        }
+
+        return view('Pagina_Principal/index', [
+            'tareas' => $tareas,
+            'estadoactual' => $estado,
+            'ordenactual' => $orden
+        ]);
     }
 
     function get_index() {
