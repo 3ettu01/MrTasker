@@ -15,14 +15,14 @@ class CustomRules
 
     public function reminder_before_due(string $str, string $fields = null, array $data = null): bool {
         if (empty($str)) {
-            return true; // No hay recordatorio, todo bien
+            return true; // si input recordatorio esta vacio
         }
 
         $request = \Config\Services::request();
         $vencimiento = $request->getPost('fvencimiento');
 
         if (empty($vencimiento)) {
-            return true; // No hay vencimiento, no tiene sentido validar la relación
+            return true; // si no ingresa vencimiento (Esto se controla aparte)
         }
 
         $recordatorio = strtotime($str);
@@ -32,14 +32,14 @@ class CustomRules
     }
     public function sub_reminder_before_due(string $str, string $fields = null, array $data = null): bool {
         if (empty($str)) {
-            return true; // No hay recordatorio, todo bien
+            return true;
         }
 
         $request = \Config\Services::request();
         $vencimiento = $request->getPost('sub_fvencimiento');
 
         if (empty($vencimiento)) {
-            return true; // No hay vencimiento, no tiene sentido validar la relación
+            return true;
         }
 
         $recordatorio = strtotime($str);

@@ -30,6 +30,37 @@
                             <div class="form-text text-dark text-end"><?= session('errors.editemail') ?></div>
                         <?php } ?>
                     </div>
+
+                    <p class="mb-0 auxiliartext mt-3">Icono</p>
+                    <div class="row text-center pb-3 pt-3 card-icons px-2 mb-4">
+
+                        <?php
+                        $img_base_url = base_url('public/recursos/img/iconsuser/');
+                        for ($i = 0; $i <= 9; $i++): ?>
+                            <?php if ($i % 5 == 0): ?>
+                                <div class="row p-0 m-0">
+                            <?php endif; ?>
+                            
+                            <div class="col p-0">
+                                <?= form_radio([
+                                    'name' => 'editIcon',
+                                    'id' => 'cat' . $i,
+                                    'value' => $i,
+                                    'class' => 'd-none',
+                                    'checked' => $user_datos['icono'] == $i
+                                ]) ?>
+                                <label for="cat<?= $i ?>">
+                                    <img src="<?= $img_base_url . 'cat' . $i . '.png' ?>" class="img-fluid cat-icon" alt="Cat <?= $i ?>">
+                                </label>
+                            </div>
+
+                            <?php if ($i % 5 == 4): ?>
+                                </div>
+                            <?php endif; ?>
+                        <?php endfor; ?>
+
+                    </div>
+
                     <div class="d-flex justify-content-center">
                         <button type="submit" class="card-button w-50 mt-3 text-white" onclick="document.getElementById('form_editperfil').submit();" style="background-color: #802b1a;">
                             Editar

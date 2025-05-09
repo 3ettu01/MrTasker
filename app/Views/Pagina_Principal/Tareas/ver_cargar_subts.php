@@ -2,14 +2,28 @@
 
     <div class="row w-100 mt-2">
         <div class="col-10">
-            <input class="form-check-input custom-checkbox me-2" type="checkbox" id="subtask1">
-            <?php if ($sub['prioridad']=='a'): ?>
+            <?php echo form_open('tareas/actestado/'. $sub['id'] , ['id' => 'form_actestado_'. $sub['id']]);
+            
+                echo form_input(array(
+                    'name' => 'idtarea', 
+                    'type' => 'hidden',
+                    'value' => $sub['idtarea']
+                ));
+                ?>
+                <input type="checkbox" name="estado<?= $sub['id'] ?>" value="c" 
+                    class="form-check-input custom-checkbox me-2" 
+                    onchange="document.getElementById('form_actestado_<?=$sub['id']?>').submit();" 
+                    <?= $sub['estado'] === 'c' ? 'checked' : '' ?>>
+
+                <?php if ($sub['prioridad']=='a'): ?>
                     <span class="subtask-title me-2 pt-2"> <b> <?= $sub['tema'] ?> </b> <i class="bi bi-exclamation-diamond-fill"></i> </span>
                 <?php else: ?>
                     <span class="subtask-title me-2 pt-2"> <?= $sub['tema'] ?> </span>
                 <?php endif; ?>
+                <!-- <span class="card-subtext pt-2">- asignada a Milo</span> -->
+
+            <?php echo form_close(); ?>
             
-            <!-- <span class="card-subtext pt-2">- asignada a Milo</span> -->
             <div class="card-subtext mt-0">Prioridad <?= $sub['prioridadtxt'] ?></div>
             <p class="m-0 text-dark"><?= $sub['descripcion'] ?></p>
             <?php if (!empty($sub['comentario'])): ?>

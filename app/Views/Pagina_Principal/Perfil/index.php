@@ -14,7 +14,7 @@
             <?= view('Pagina_Principal/menu_lateral') ?>
 
             <div class="col d-flex flex-column align-items-center mt-5">
-                <div class="rounded-circle d-flex justify-content-center align-items-center mx-auto border border-dark" style="width: 150px; height: 150px; overflow: hidden; background-color:#d9d9d9;">
+                <div class="rounded-circle d-flex justify-content-center align-items-center mx-auto border border-dark" style="width: 150px; height: 150px; background-color:#fff;">
                     <img src="<?= base_url('public/recursos/img/iconsuser/cat'.$sesion->get('usericon').'.png') ?>" alt="" width="120" class="pt-3">
                 </div>
                 
