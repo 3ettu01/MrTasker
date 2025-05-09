@@ -226,7 +226,7 @@ class Controlador extends BaseController {
         ];
         $estado = [ 
             'd' => 'DEFINIDA',
-            'e' => 'EN PROCESO',
+            'p' => 'EN PROCESO',
             'c' => 'COMPLETADA'
         ];
         $color = [
@@ -277,14 +277,45 @@ class Controlador extends BaseController {
         $usuarioM = new \App\Models\UsuarioModel();
         $usuarioM->update($userid, [
             'nombre' => $this->request->getPost('editnombre'),
-            'email' => $this->request->getPost('editemail')
+            'email' => $this->request->getPost('editemail'),
+            'icono' => $this->request->getPost('editIcon')
         ]);
 
         // actualizar sesion
         $sesion->set('usernombre', $this->request->getPost('editnombre'));
         $sesion->set('useremail', $this->request->getPost('editemail'));
+        $sesion->set('usericon', $this->request->getPost('editIcon'));
 
         return redirect()->back()->with('success', 'Perfil actualizado');
+    }
+
+    public function actestado($id) {
+        $subM = new \App\Models\SubtareaModel();
+        $tareaM = new \App\Models\TareaModel();
+
+        $subtarea = $subM->find($id);
+        // if (!$subtarea) {
+        //     return redirect()->back()->with('error', 'Subtarea no encontrada');
+        // }
+
+        $nuevoEstado = $this->request->getPost('estado'.$id) === 'c' ? 'c' : 'd';
+        $subM->update($id, ['estado' => $nuevoEstado]);
+
+        $idtarea = $this->request->getPost('idtarea');
+        $total = $subM->where('idtarea', $idtarea)->countAllResults();
+        $completadas = $subM->where('idtarea', $idtarea)->where('estado', 'c')->countAllResults();
+
+        if ($completadas === 0) {
+            $nuevoEstadoTarea = 'd'; //definida
+        } elseif ($completadas === $total) {
+            $nuevoEstadoTarea = 'c'; //completada
+        } else {
+            $nuevoEstadoTarea = 'p'; //en proceso
+        }
+
+        $tareaM->update($idtarea, ['estado' => $nuevoEstadoTarea]);
+
+        return redirect()->to(base_url('tareas/ver/' . $idtarea));
     }
 
     function get_index() {
@@ -305,7 +336,7 @@ class Controlador extends BaseController {
         return view('Pagina_Principal/Perfil/index', [
             'tareas_creadas' => $tareas_creadas,
             'tareas_terminadas' => $tareas_terminadas,
-            'user_datos' => ['nombre' => $sesion->get('usernombre') , 'email' => $sesion->get('useremail')]
+            'user_datos' => ['nombre' => $sesion->get('usernombre') , 'email' => $sesion->get('useremail'), 'icono' => $sesion->get('usericon')]
         ]);
 
     }

@@ -20,3 +20,4 @@ $routes->post('form/registro', 'Controlador::registro');
 $routes->post('form/creart', 'Controlador::tarea');
 $routes->post('form/crearsubt/(:num)', 'Controlador::subtarea/$1');
 $routes->post('form/editperfil', 'Controlador::editperfil');
+$routes->post('tareas/actestado/(:num)', 'Controlador::actestado/$1');
