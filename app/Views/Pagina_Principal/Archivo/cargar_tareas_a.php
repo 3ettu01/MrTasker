@@ -41,11 +41,6 @@
         </div>
     </div>
 
-    <!-- Subtareas -->
-    <hr class="mt-3 mb-2">
-    <div class="card-subtext">
-        Subtareas: <?= $tarea['cantsubtareas'] ?>
-    </div>
 </div>
  
 
