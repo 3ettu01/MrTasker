@@ -8,9 +8,17 @@
         <?php endif; ?>
 
         <span class="card-subtext-btn"> - <?= $tarea['estadotxt'] ?> </span>
+
+        <?php if ($tarea['archivo']=='1'): ?>
+            <span class="card-subtext-btn">, Y ARCHIVADA </span>
+        <?php endif; ?>
+
         <!-- <span class="card-subtext ms-1">- asignada a Tofi</span> -->
     </div>
     <div class="col-2 d-flex flex-column align-items-end">
+        <?php if ($tarea['estado']==='c' && $tarea['archivo']=='0'): ?>
+            <a href="<?= base_url('tareas/archivar/' . $tarea['id']) ?>" class="card-subtext-btn">ARCHIVAR</a>
+        <?php endif; ?>
         <a href="" class="card-subtext-btn">Editar</a>
         <a href="" class="card-subtext-btn">Eliminar</a>
     </div>

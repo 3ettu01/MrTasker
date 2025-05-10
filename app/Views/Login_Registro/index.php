@@ -27,8 +27,10 @@
 
         </div>
 
-        <div class="row my-4 card-design d-flex justify-content-center mx-auto">
-            hi
+        <div class="my-4 card-design d-flex justify-content-center mx-auto p-5">
+            <img src="<?= base_url('public/recursos/img/1.jpg'); ?>" width="350" class="m-3">
+            <img src="<?= base_url('public/recursos/img/2.jpg'); ?>" width="350" class="m-3">
+            <img src="<?= base_url('public/recursos/img/3.jpg'); ?>" width="350" class="m-3">
         </div>
 
     </div>

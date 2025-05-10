@@ -2,8 +2,9 @@
 
     <div class="row w-100 mt-2">
         <div class="col-10">
+            <?php if($tarea['archivo']=='0'): ?> <!-- NO ESTA ARCHIVADA -->
+
             <?php echo form_open('tareas/actestado/'. $sub['id'] , ['id' => 'form_actestado_'. $sub['id']]);
-            
                 echo form_input(array(
                     'name' => 'idtarea', 
                     'type' => 'hidden',
@@ -21,8 +22,18 @@
                     <span class="subtask-title me-2 pt-2"> <?= $sub['tema'] ?> </span>
                 <?php endif; ?>
                 <!-- <span class="card-subtext pt-2">- asignada a Milo</span> -->
-
             <?php echo form_close(); ?>
+
+            <?php else: ?> <!-- ESTA ARCHIVADA -->
+
+                <?php if ($sub['prioridad']=='a'): ?>
+                    <span class="subtask-title me-2 pt-2"> <b> <?= $sub['tema'] ?> </b> <i class="bi bi-exclamation-diamond-fill"></i> </span>
+                <?php else: ?>
+                    <span class="subtask-title me-2 pt-2"> <?= $sub['tema'] ?> </span>
+                <?php endif; ?>
+                <!-- <span class="card-subtext pt-2">- asignada a Milo</span> -->
+
+            <?php endif; ?>
             
             <div class="card-subtext mt-0">Prioridad <?= $sub['prioridadtxt'] ?></div>
             <p class="m-0 text-dark"><?= $sub['descripcion'] ?></p>

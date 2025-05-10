@@ -20,6 +20,7 @@ class Controlador extends BaseController {
         $tareas = $tareaM
             ->where('iddueño', $sesion->get('userid'))
             ->where('estado', $filtroestado)
+            ->where('archivo', 0)
             ->orderBy("FIELD(prioridad, 'a', 'm', 'b')", '', false) 
             ->orderBy('fvencimiento', 'ASC') 
             ->findAll();
@@ -169,7 +170,8 @@ class Controlador extends BaseController {
                                 'estado' => 'd',
                                 'fvencimiento' => $this->request->getPost('fvencimiento'),
                                 'frecordatorio' => $this->request->getPost('frecordatorio'),
-                                'color' => $numeroColor);
+                                'color' => $numeroColor,
+                                'archivo' => '0');
         $save_bdd = new \App\Models\TareaModel();
         $save_bdd -> insert($datos_registro);
 
@@ -389,6 +391,23 @@ class Controlador extends BaseController {
             'ordenactual' => $orden
         ]);
     }
+    public function archivar ($id) {
+        $sesion = session();
+        if (!$sesion->has('userid')) {
+            return redirect()->to('/');
+        }
+
+        $tareaM = new \App\Models\TareaModel();
+
+        $tarea = $tareaM->find($id);
+        if (!$tarea || $tarea['iddueño'] != session()->get('userid')) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Tarea no encontrada o sin permisos.");
+        }
+
+        $tareaM->update($id, ['archivo' => 1]);
+
+        return redirect()->to('/Archivo');
+    }
 
     function get_index() {
         return view('Pagina_Principal/index');
@@ -411,6 +430,41 @@ class Controlador extends BaseController {
             'user_datos' => ['nombre' => $sesion->get('usernombre') , 'email' => $sesion->get('useremail'), 'icono' => $sesion->get('usericon')]
         ]);
 
+    }
+    function get_archivo(){
+        $sesion = session();
+
+        $tareaM = new \App\Models\TareaModel();
+
+        $tareas = $tareaM
+            ->where('iddueño', $sesion->get('userid'))
+            ->where('archivo', 1)
+            ->orderBy("FIELD(prioridad, 'a', 'm', 'b')", '', false) 
+            ->orderBy('fvencimiento', 'ASC') 
+            ->findAll();
+
+        $prioridad = [
+            'b' => 'baja',
+            'm' => 'media',
+            'a' => 'alta'
+        ];
+        $color = [
+            1 => '#9ac8ff',
+            2 => '#96db9d',
+            3 => '#ff9c9c',
+            4 => '#ffe885',
+            5 => '#d29fd6'
+        ];
+
+        foreach ($tareas as &$tarea) {
+            $tarea['prioridadtxt'] = $prioridad[$tarea['prioridad']];
+            $tarea['colorcod'] = $color[$tarea['color']];
+        }
+
+
+        return view('Pagina_Principal/Archivo/index', [
+            'tareas' => $tareas
+        ]);
     }
 
     public function cerrar_sesion() {
