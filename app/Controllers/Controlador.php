@@ -294,6 +294,120 @@ class Controlador extends BaseController {
 
         return redirect()->back()->with('success', 'Perfil actualizado');
     }
+    public function edittarea($id) {
+        $sesion = session();
+        $userid = $sesion->get('userid');
+
+        $validar = service('validation');
+        $validar -> setRules ([
+            'titulo' => 'required|min_length[2]',
+            'desc' => 'required',
+            'fvencimiento' => 'required|check_future_date',
+            'frecordatorio' => 'check_future_date|reminder_before_due'
+            ] , [
+            'titulo' => ['required' => 'El titulo es obligatorio',
+                        'min_length' => 'El titulo es demasiado corto'] ,
+            'desc' => ['required' => 'Añada una descripcion'] ,
+            'fvencimiento' => ['required' => 'La fecha de vencimiento es obligatoria',
+                        'check_future_date' => 'Fecha no valida'] ,
+            'frecordatorio' => ['check_future_date' => 'Fecha invalida',
+                                'reminder_before_due' => 'Fecha invalida: no puede ser posterior al vencimiento']
+            ]);
+        if (!$validar -> withRequest($this->request) -> run()) {
+            return redirect() -> back() -> withInput() -> with('errors',$validar->getErrors());
+        }
+
+        $colorseleccionado = $this->request->getPost('color_tarea');
+        $colores = [
+            '#9ac8ff' => 1,  
+            '#96db9d' => 2,  
+            '#ff9c9c' => 3,  
+            '#ffe885' => 4,  
+            '#d29fd6' => 5   
+        ];
+        $numeroColor = $colores[$colorseleccionado];
+
+        $tareaM = new \App\Models\TareaModel();
+        $tareaM->update($id, [
+            'tema' => $this->request->getPost('titulo'),
+            'descripcion' => $this->request->getPost('desc'),
+            'prioridad' =>  $this->request->getPost('priori'),
+            'fvencimiento' => $this->request->getPost('fvencimiento'),
+            'frecordatorio' => $this->request->getPost('frecordatorio'),
+            'color' => $numeroColor
+        ]);
+
+        return redirect()->to(base_url('/tareas/ver/'. $id));
+    }
+    public function editsubtarea($id, $idtarea) {
+        $validar = service('validation');
+        $validar -> setRules ([
+            'sub_titulo' => 'required|min_length[2]',
+            'sub_desc' => 'required',
+            'sub_fvencimiento' => 'required|check_future_date',
+            'sub_frecordatorio' => 'check_future_date|sub_reminder_before_due'
+            ] , [
+            'sub_titulo' => ['required' => 'El titulo es obligatorio',
+                        'min_length' => 'El titulo es demasiado corto'] ,
+            'sub_desc' => ['required' => 'Añada una descripcion'] ,
+            'sub_fvencimiento' => ['required' => 'La fecha de vencimiento es obligatoria',
+                        'check_future_date' => 'Fecha no valida'] ,
+            'sub_frecordatorio' => ['check_future_date' => 'Fecha invalida',
+                                    'sub_reminder_before_due' => 'Invalida: no puede ser posterior al vencimiento']
+            ]);
+        if (!$validar -> withRequest($this->request) -> run()) {
+            // return redirect() -> back() -> withInput() -> 
+            //     with('errormodal','Modaleditsubt'.$id) ->
+            //     with('errors',$validar->getErrors());
+            return redirect()->back()
+                ->with('form_errors_'.$id, $validar->getErrors())
+                ->with('form_old_'.$id, $this->request->getPost())
+                ->with('errormodal', 'Modaleditsubt'.$id);
+        }
+
+        $subtareaM = new \App\Models\SubtareaModel();
+        $subtareaM->update($id, [
+            'tema' => $this->request->getPost('sub_titulo'),
+            'descripcion' => $this->request->getPost('sub_desc'),
+            'prioridad' =>  $this->request->getPost('sub_priori'),
+            'fvencimiento' => $this->request->getPost('sub_fvencimiento'),
+            'frecordatorio' => $this->request->getPost('sub_frecordatorio'),
+            'comentario' => $this->request->getPost('sub_com')
+        ]);
+
+        return redirect()->to(base_url('/tareas/ver/'. $idtarea));
+    }
+    
+    public function deltarea($id) {
+        $tareaM = new \App\Models\TareaModel();
+        $tareaM->delete($id);
+
+        return redirect()->to('/');
+    }
+    public function delsubtarea($id, $idtarea) {
+        $subM = new \App\Models\SubtareaModel();
+        $tareaM = new \App\Models\TareaModel();
+
+        $subM->delete($id);
+
+        // actualiza el estado de la tarea
+        $total = $subM->where('idtarea', $idtarea)->countAllResults();
+        $completadas = $subM->where('idtarea', $idtarea)->where('estado', 'c')->countAllResults();
+
+        if ($total == 0) {
+            $nuevoEstadoTarea = 'd';
+        } elseif ($completadas === 0) {
+            $nuevoEstadoTarea = 'd';
+        } elseif ($completadas === $total) {
+            $nuevoEstadoTarea = 'c';
+        } else {
+            $nuevoEstadoTarea = 'p';
+        }
+
+        $tareaM->update($idtarea, ['estado' => $nuevoEstadoTarea]);
+
+        return redirect()->to(base_url('/tareas/ver/' . $idtarea));
+    }
 
     public function actestado($id) {
         $subM = new \App\Models\SubtareaModel();
@@ -464,6 +578,25 @@ class Controlador extends BaseController {
 
         return view('Pagina_Principal/Archivo/index', [
             'tareas' => $tareas
+        ]);
+    }
+    function get_edittarea($id){
+        $sesion = session();
+
+        $tareaM = new \App\Models\TareaModel();
+
+        $tarea = $tareaM->find($id);
+        $colores = [
+            1 => '#9ac8ff',
+            2 => '#96db9d',
+            3 => '#ff9c9c',
+            4 => '#ffe885',
+            5 => '#d29fd6'
+        ];
+        $tarea['colorcod'] = $colores[$tarea['color']];
+
+        return view('Pagina_Principal/Tareas/Edit/form_edit_t', [
+            'tarea' => $tarea
         ]);
     }
 

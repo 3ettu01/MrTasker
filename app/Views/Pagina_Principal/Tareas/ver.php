@@ -48,6 +48,6 @@
 
     <!-- modal crear subtarea -->
     <?= view('Pagina_Principal/Tareas/form_crear_subt.php') ?>
-
+    
 </body>
 </html>

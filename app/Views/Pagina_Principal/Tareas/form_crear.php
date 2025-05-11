@@ -127,11 +127,6 @@
                                 <?php } ?>
                             </div>
                         </div>
-                        <!-- <div>
-                            <a href="#" role="button" class="btn-simple btn btn-link mt-3" data-bs-toggle="modal" data-bs-target="#Modalsubt">
-                                <i class="bi bi-file-earmark-plus"></i> Añadir subtarea
-                            </a>
-                        </div> -->
                         
                     </div>
                 </div>
