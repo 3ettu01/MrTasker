@@ -1,3 +1,6 @@
+<?php
+    $sesion = session();
+?>
 <?php foreach ($subtareas as $sub) : ?>
 
     <div class="row w-100 mt-2">
@@ -43,8 +46,16 @@
         </div>
 
         <div class="col-2 d-flex flex-column justify-content-end align-items-end p-0" style="min-height: 100%;">
-        <a href="" class="card-subtext-btn">Editar</a>
-        <a href="" class="card-subtext-btn">Eliminar</a>
+                <a href="#" class="card-subtext-btn" data-bs-toggle="modal" 
+                data-bs-target="#Modaleditsubt<?= $sub['id'] ?>">Editar</a>
+            <!-- <a href="" class="card-subtext-btn">Eliminar</a> -->
+
+            <?php if($tarea['iddueño'] == $sesion->get('userid')): ?> <!-- solo figura la opcion eliminar al dueño -->
+                <a href="<?= base_url('/subt/eliminar/' . $sub['id'] .'/'. $tarea['id']) ?>" 
+                onclick="return confirm('¿Estás seguro de que quieres eliminar esta subtarea?')"
+                class="card-subtext-btn">Eliminar</a>
+            <?php endif; ?>
+
             <?php if (!empty($sub['frecordatorio'])): ?>
                 <span class="card-subtext"> <i class="bi bi-bell-fill"></i> <?= $sub['frecordatorio'] ?> </span>
             <?php endif; ?>
@@ -54,4 +65,23 @@
 
     <hr class="mb-1 mt-2">
 
+    <!-- modal editar subtarea -->
+
 <?php endforeach; ?>
+
+
+<?php foreach ($subtareas as $sub): ?>
+    <?= view('Pagina_Principal/Tareas/Edit/form_edit_s.php', [
+        'sub' => $sub,
+        'tarea' => $tarea
+    ]) ?>
+<?php endforeach; ?>
+
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+    <?php if (session('errormodal')): ?>
+        var modal = new bootstrap.Modal(document.getElementById("<?= session('errormodal') ?>"));
+        modal.show();
+    <?php endif; ?>
+    });
+</script>

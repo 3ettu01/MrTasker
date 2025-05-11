@@ -1,3 +1,6 @@
+<?php
+    $sesion = session();
+?>
 <div class="row align-items-start">
     <div class="col-10 d-flex align-items-center">
         
@@ -17,10 +20,17 @@
     </div>
     <div class="col-2 d-flex flex-column align-items-end">
         <?php if ($tarea['estado']==='c' && $tarea['archivo']=='0'): ?>
-            <a href="<?= base_url('tareas/archivar/' . $tarea['id']) ?>" class="card-subtext-btn">ARCHIVAR</a>
+            <a href="<?= base_url('tareas/archivar/' . $tarea['id']) ?>"
+            onclick="return confirm('¿Estás seguro de que quieres archivar esta tarea?')" 
+            class="card-subtext-btn">ARCHIVAR</a>
         <?php endif; ?>
-        <a href="" class="card-subtext-btn">Editar</a>
-        <a href="" class="card-subtext-btn">Eliminar</a>
+        <a href="<?= base_url('tareas/editar/' . $tarea['id']) ?>" class="card-subtext-btn">Editar</a>
+        <?php if($tarea['iddueño'] == $sesion->get('userid')): ?> <!-- solo figura la opcion eliminar al dueño -->
+            <a href="<?= base_url('/tareas/eliminar/' . $tarea['id']) ?>" 
+            onclick="return confirm('¿Estás seguro de que quieres eliminar esta tarea?')"
+            class="card-subtext-btn">Eliminar</a>
+        <?php endif; ?>
+        
     </div>
 </div>
 <div class="card-subtext mt-0">prioridad <?= $tarea['prioridadtxt'] ?> </div>
