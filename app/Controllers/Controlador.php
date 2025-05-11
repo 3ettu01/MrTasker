@@ -8,6 +8,14 @@ use App\Models\UsuarioModel;
 class Controlador extends BaseController {
     function index($filtroestado = 'p') {
 
+        // email test
+        // $email= \Config\Services::email();
+        // $email -> setFrom('mr.tasker.email@gmail.com','Mr. Tasker Administrador de tareas');
+        // $email->setTo('bettinaa.jp@gmail.com');
+        // $email -> setSubject('Test');
+        // $email -> setMessage('Mail test contenido');
+        // $email -> send();
+
         $sesion = session();
 
         if (!$sesion->has('userid')) {
