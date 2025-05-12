@@ -23,9 +23,6 @@
                 <!-- btn regresar -->
                     <a href="<?= base_url('/') ?>" class="btn-simple fs-4"> <i class="bi bi-arrow-left-circle"></i> </a>
                 </div>
-                <div class="col-10 d-flex justify-content-center">
-                    <h5 class="w-100 text-center">Nueva tarea</h5>
-                </div>
             </div>
             
         </div>
@@ -45,7 +42,7 @@
                                 'value' => old('titulo', $tarea['tema'] ?? '')
                             )); 
                             if (session('errors.titulo')){   ?>
-                                <div class="form-text text-dark text-end"><?= session('errors.titulo') ?></div>
+                                <div class="form-text text-danger fw-bold text-end"><?= session('errors.titulo') ?></div>
                             <?php } ?>
                         </div>
                         <div class="row form-floating">
@@ -58,7 +55,7 @@
                                 'style' => 'height:50px'
                             ]);
                             if (session('errors.desc')) { ?>
-                                <div class="form-text text-dark text-end"><?= session('errors.desc') ?></div>
+                                <div class="form-text text-danger fw-bold text-end"><?= session('errors.desc') ?></div>
                             <?php } ?>
                         </div>
                         <div>
@@ -97,7 +94,7 @@
                                     'value' => old('fvencimiento', $tarea['fvencimiento'] ?? '')
                                 )); 
                                 if (session('errors.fvencimiento')){   ?>
-                                    <div class="form-text text-dark text-end"><?= session('errors.fvencimiento') ?></div>
+                                    <div class="form-text text-danger fw-bold text-end"><?= session('errors.fvencimiento') ?></div>
                                 <?php } ?>
                             </div>
                             <div class="col ms-2">
@@ -111,7 +108,7 @@
                                     'value' => old('frecordatorio', $tarea['frecordatorio'] ?? '')
                                 )); 
                                 if (session('errors.frecordatorio')){   ?>
-                                    <div class="form-text text-dark text-end"><?= session('errors.frecordatorio') ?></div>
+                                    <div class="form-text text-danger fw-bold text-end"><?= session('errors.frecordatorio') ?></div>
                                 <?php } ?>
                             </div>
                         </div>
@@ -122,7 +119,7 @@
                 <div class="col-3">
                     <!-- SEGUNDA PARTE: barra lateral -->
                     <div class="menu-content" id="menu-crear" style="background-color: #f1e7e1; padding-top: 110px;">
-                        <div class="mb-4">
+                        <div class="mb-4 w-100 mt-5">
                             <!-- color -->
                             <label class="form-label">Color de la tarea</label>
                             <div class="d-flex flex-wrap gap-2">
@@ -174,24 +171,19 @@
                         </div>
 
                         <!-- colaboradores -->
-                        <div class="mb-4">
-                            <label class="form-label">Colaborar con otro usuario</label>
+                        <!-- <div class="mb-4 w-100">
+                            <label class="form-label">Eliminar colaborador</label>
                             <div class="input-group mb-2">
-                                <!-- <input type="email" class="form-control" placeholder="Agregar email" name="colaborador_email">
-                                <button class="btn btn-outline-secondary" type="button" title="Agregar colaborador">
-                                    <i class="bi bi-person-plus"></i>
-                                </button> -->
-                            </div>
-                            <!-- <select class="form-select" name="rol_colaborador">
-                                <option value="participante">Participante</option>
-                                <option value="editor">Editor</option>
-                            </select> -->
-                        </div>
+                                <select class="form-select" name="rol_colaborador">
+                                    <option value="participante">Participante</option>
+                                    <option value="editor">Editor</option>
+                                </select>
+                        </div> -->
 
                         <!-- publicar -->
                         <div class="menu-footer mt-4">
                             <button type="submit" class="card-button w-100 text-white" style="background-color: #802b1a;"  onclick="document.getElementById('form_editt').submit();">
-                                CREAR TAREA
+                                EDITAR TAREA
                             </button>
                         </div>
                     </div>

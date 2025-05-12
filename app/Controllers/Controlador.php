@@ -608,6 +608,80 @@ class Controlador extends BaseController {
         ]);
     }
 
+    public function invitar_colaborador() {
+        $email = $this->request->getPost('col_email');
+        $tipo = $this->request->getPost('col_rol'); // 'e' o 'l'
+        $idtarea = $this->request->getPost('col_idtarea');
+        $iddueno = session()->get('userid');
+
+        $validar = service('validation');
+        $validar->setRules([
+            'col_email' => 'required',
+        ] , [
+            'col_email' => [ 'required' => 'El email es obligatorio']
+        ]);
+        if (!$validar->withRequest($this->request)->run()) {
+            return redirect()->back()->with('errors', $validar->getErrors());
+        }
+
+        // verificar usuario existente
+        $usuarioM = new \App\Models\UsuarioModel();
+        $usuario = $usuarioM->where('email', $email)->first();
+        if (!$usuario) {
+            return redirect()->back()->with('errors', ['col_email' => 'El email no pertenece a un usuario registrado']);
+        }
+
+        $idcolaborador = $usuario['id'];
+
+        // verificar colaboracion ya existente
+        $colabM = new \App\Models\ColaboracionModel();
+        $colabora = $colabM
+            ->where('idcolaborador', $idcolaborador)
+            ->where('idtarea', $idtarea)
+            ->first();
+
+        if ($colabora) {
+            return redirect()->back()->with('errors', ['col_email' => 'Este usuario ya colabora en la tarea.']);
+        }
+
+        // link a la colaboracion
+        $link = base_url("colaboraciones/aceptar/{$iddueno}/{$idcolaborador}/{$idtarea}/{$tipo}");
+
+        // envío del correo
+        $emailService = \Config\Services::email();
+        $emailService -> setFrom('mr.tasker.email@gmail.com','Mr. Tasker Administrador de tareas');
+        $emailService->setTo($email);
+        $emailService->setSubject("Invitación a colaborar en una tarea");
+        $emailService->setMessage("{$usuarioM->find($iddueno)['nombre']} te ha invitado a colaborar en una tarea.
+        Haz clic en el siguiente enlace para aceptar la invitación: <a href='{$link}'>Aceptar</a>");
+
+        if ($emailService->send()) {
+            return redirect()->to(base_url('/tareas/ver/'. $idtarea));
+        } else {
+            // toast error?
+            return redirect()->to(base_url('/tareas/ver/'. $idtarea));
+        }
+    } 
+    public function aceptar_colaboracion($iddueno, $idcolaborador, $idtarea, $tipo){
+
+        if (!session()->has('userid')) {
+            return redirect()->to('/');
+        }
+        if (session()->get('userid') != $idcolaborador) {
+            return redirect()->to('/');
+        }
+
+        $colaboracionM = new \App\Models\ColaboracionModel();
+        $colaboracionM->insert([
+            'iddueno' => $iddueno,
+            'idcolaborador' => $idcolaborador,
+            'idtarea' => $idtarea,
+            'tipocolaboracion' => $tipo
+        ]);
+
+        return redirect()->to(base_url("/tareas/ver/$idtarea"));
+    }
+
     public function cerrar_sesion() {
         $sesion = session();
         $sesion->destroy();
