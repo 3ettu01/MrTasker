@@ -26,7 +26,7 @@
                                 'value' => $old['sub_titulo'] ?? $sub['tema']
                             )); 
                             if (!empty($errors['sub_titulo'])): ?>
-                                <div class="form-text text-dark text-end"><?= $errors['sub_titulo'] ?></div>
+                                <div class="form-text text-danger fw-bold text-end"><?= $errors['sub_titulo'] ?></div>
                             <?php endif; ?>
                     </div>
                     <div class="row form-floating px-3">
@@ -39,7 +39,7 @@
                                 'style' => 'height:100px'
                             ]);
                             if (!empty($errors['sub_desc'])): ?>
-                                <div class="form-text text-dark text-end"><?= $errors['sub_desc'] ?></div>
+                                <div class="form-text text-danger fw-bold text-end"><?= $errors['sub_desc'] ?></div>
                             <?php endif; ?>
                     </div>
                     <div>
@@ -73,7 +73,7 @@
                                     'value' => $old['sub_fvencimiento'] ?? $sub['fvencimiento']
                                 )); 
                                 if (!empty($errors['sub_fvencimiento'])): ?>
-                                    <div class="form-text text-dark text-end"><?= $errors['sub_fvencimiento'] ?></div>
+                                    <div class="form-text text-danger fw-bold text-end"><?= $errors['sub_fvencimiento'] ?></div>
                                 <?php endif; ?>
                         </div>
                         <div class="col ms-2">
@@ -86,7 +86,7 @@
                                     'value' => $old['sub_frecordatorio'] ?? $sub['frecordatorio']
                                 )); 
                                 if (!empty($errors['sub_frecordatorio'])): ?>
-                                    <div class="form-text text-dark text-end"><?= $errors['sub_frecordatorio'] ?></div>
+                                    <div class="form-text text-danger fw-bold text-end"><?= $errors['sub_frecordatorio'] ?></div>
                                 <?php endif; ?>
                         </div>
                     </div>
