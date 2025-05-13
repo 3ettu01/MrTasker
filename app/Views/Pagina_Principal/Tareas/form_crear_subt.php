@@ -112,6 +112,13 @@
                             ]);
                         ?>
                     </div>
+                    <div>
+                        <?php
+                        echo form_dropdown('idresponsable', $responsables, old('idresponsable'), [
+                            'class' => 'card-input2'
+                        ]);
+                        ?>
+                    </div>
                     <div class="row d-flex justify-content-center mt-3">
                         <button type="submit" class="card-button text-white" onclick="document.getElementById('form_crearsubt').submit();" style="background-color: #802b1a;">
                             Añadir

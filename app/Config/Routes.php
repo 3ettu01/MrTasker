@@ -23,7 +23,9 @@ $routes->get('/tareas/archivar/(:num)', 'Controlador::archivar/$1');
 $routes->get('/tareas/eliminar/(:num)', 'Controlador::deltarea/$1');
 $routes->get('/subt/eliminar/(:num)/(:num)', 'Controlador::delsubtarea/$1/$2');
 
-$routes->get('colaboraciones/aceptar/(:num)/(:num)/(:num)/(:alpha)', 'Controlador::aceptar_colaboracion/$1/$2/$3/$4');
+$routes->get('/colaboraciones/aceptar/(:num)/(:num)/(:num)/(:alpha)', 'Controlador::aceptar_colaboracion/$1/$2/$3/$4');
+$routes->get('/Colaboraciones/(:alpha)', 'Controlador::get_colaboraciones/$1');
+$routes->get('colaboraciones/ver/(:num)', 'Controlador::colab_ver/$1');
 
 // formularios
 $routes->post('form/login', 'Controlador::login');

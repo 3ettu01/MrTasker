@@ -7,7 +7,6 @@
     <div class="row w-100 mt-2">
         <div class="col-10">
             <?php if($tarea['archivo']=='0'): ?> <!-- NO ESTA ARCHIVADA -->
-
             <?php echo form_open('tareas/actestado/'. $sub['id'] , ['id' => 'form_actestado_'. $sub['id']]);
                 echo form_input(array(
                     'name' => 'idtarea', 
@@ -30,6 +29,7 @@
                 <?php else: ?>
                     <span class="subtask-title me-2 pt-2"> <?= $sub['tema'] ?> </span>
                 <?php endif; ?>
+
                 <?php if($sub['responsable'] != ''): ?>
                     <span class="card-subtext pt-2">- asignada a <?= $sub['responsable'] ?></span>
                 <?php endif; ?>
@@ -42,6 +42,7 @@
                 <?php else: ?>
                     <span class="subtask-title me-2 pt-2"> <?= $sub['tema'] ?> </span>
                 <?php endif; ?>
+                
                 <?php if($sub['responsable'] != ''): ?>
                     <span class="card-subtext pt-2">- asignada a <?= $sub['responsable'] ?></span>
                 <?php endif; ?>
@@ -56,14 +57,9 @@
         </div>
 
         <div class="col-2 d-flex flex-column justify-content-end align-items-end p-0" style="min-height: 100%;">
+            <?php if($tipocolaboracion== 'e' && $tarea['estado'] != 'c'): ?>
                 <a href="#" class="card-subtext-btn" data-bs-toggle="modal" 
                 data-bs-target="#Modaleditsubt<?= $sub['id'] ?>">Editar</a>
-            <!-- <a href="" class="card-subtext-btn">Eliminar</a> -->
-
-            <?php if($tarea['iddueño'] == $sesion->get('userid')): ?> <!-- solo figura la opcion eliminar al dueño -->
-                <a href="<?= base_url('/subt/eliminar/' . $sub['id'] .'/'. $tarea['id']) ?>" 
-                onclick="return confirm('¿Estás seguro de que quieres eliminar esta subtarea?')"
-                class="card-subtext-btn">Eliminar</a>
             <?php endif; ?>
 
             <?php if (!empty($sub['frecordatorio'])): ?>
