@@ -13,10 +13,16 @@
     <div class="d-flex justify-content-between align-items-start">
         <div class="d-flex align-items-center">
             <h4 class="me-1">
-                <?php if ($tarea['prioridad']=='a'): ?>
-                    <i class="bi bi-chevron-right"></i> <b> <?= $tarea['tema'] ?> </b> <i class="bi bi-exclamation-diamond"></i>
+                <?php if ($tarea['compartida']): ?>
+                    <img src="<?= base_url('public/recursos/img/coop.png') ?>" class="me-2" width="30">
                 <?php else: ?>
-                    <i class="bi bi-chevron-right"></i> <?= $tarea['tema'] ?>
+                    <i class="bi bi-chevron-right"></i>
+                <?php endif; ?>
+
+                <?php if ($tarea['prioridad']=='a'): ?>
+                    <b> <?= $tarea['tema'] ?> </b> <i class="bi bi-exclamation-diamond"></i>
+                <?php else: ?>
+                    <?= $tarea['tema'] ?>
                 <?php endif; ?>
             </h4>
         </div>

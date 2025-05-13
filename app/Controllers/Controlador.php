@@ -4,6 +4,7 @@ use CodeIgniter\Controller;
 use App\Models\TareaModel;
 use App\Models\SubtareaModel;
 use App\Models\UsuarioModel;
+use App\Models\ColaboracionModel;
 
 class Controlador extends BaseController {
     function index($filtroestado = 'p') {
@@ -24,6 +25,7 @@ class Controlador extends BaseController {
 
         $tareaM = new TareaModel();
         $subtareaM = new SubtareaModel();
+        $colabM = new \App\Models\ColaboracionModel();
 
         $tareas = $tareaM
             ->where('iddueño', $sesion->get('userid'))
@@ -52,6 +54,11 @@ class Controlador extends BaseController {
                 ->countAllResults();
             $tarea['prioridadtxt'] = $prioridad[$tarea['prioridad']];
             $tarea['colorcod'] = $color[$tarea['color']];
+
+            $compartida = $colabM
+                ->where('idtarea', $tarea['id'])
+                ->countAllResults();
+            $tarea['compartida'] = ($compartida > 0);
         }
 
         return view('Pagina_Principal/index', [
@@ -215,11 +222,12 @@ class Controlador extends BaseController {
                                 'estado' => 'd',
                                 'fvencimiento' => $this->request->getPost('sub_fvencimiento'),
                                 'frecordatorio' => $this->request->getPost('sub_frecordatorio'),
+                                'idresponsable' => $this->request->getPost('idresponsable'),
                                 'comentario' => $this->request->getPost('sub_com'));
         $save_bdd = new \App\Models\SubtareaModel();
         $save_bdd -> insert($datos_registro);
 
-        return redirect()->to(base_url('/tareas/ver/'. $idtarea));
+        return redirect()->back();
     }
     public function ver($id){
         if (!session()->get('userid')) { //control para no entrar sin sesion
@@ -227,7 +235,10 @@ class Controlador extends BaseController {
         }
         $tareaM = new TareaModel();
         $subtareaM = new SubtareaModel();
+        $colabM = new ColaboracionModel();
+        $usuarioM = new UsuarioModel();
         $tarea = $tareaM->find($id);
+        $colaboraciones = $colabM->where('idtarea', $id)->findAll(); //consigo todos los colaboradores
 
         if (!$tarea) { //control
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Tarea no encontrada");
@@ -254,6 +265,17 @@ class Controlador extends BaseController {
         $tarea['colorcod'] = $color[$tarea['color']];
         $tarea['estadotxt'] = $estado[$tarea['estado']];
 
+        $responsables = ['' => 'Responsable']; //listado de colaboradores de la tarea (y el dueño)
+        $dueno = $usuarioM->find($tarea['iddueño']);
+        $responsables[$dueno['id']] = $dueno['email'];
+
+        foreach ($colaboraciones as $colab) {
+            $colaborador = $usuarioM->find($colab['idcolaborador']);
+            if ($colaborador) {
+                $responsables[$colaborador['id']] = $colaborador['email'];
+            }
+        }
+
         $subtareas = $subtareaM
                     ->where('idtarea', $id)
                     ->orderBy("FIELD(prioridad, 'a', 'm', 'b')", '', false)
@@ -261,11 +283,18 @@ class Controlador extends BaseController {
 
         foreach ($subtareas as &$sub) {
             $sub['prioridadtxt'] = $prioridad[$sub['prioridad']];
+            if (!empty($sub['idresponsable'])) {
+                $responsable = $usuarioM->find($sub['idresponsable']);
+                $sub['responsable'] = $responsable['nombre'];
+            } else {
+                $sub['responsable'] = '';
+            }
         }
 
         return view('Pagina_Principal/Tareas/ver', [
             'tarea' => $tarea,
-            'subtareas' => $subtareas
+            'subtareas' => $subtareas,
+            'responsables' => $responsables
         ]);
     }
 
@@ -380,10 +409,11 @@ class Controlador extends BaseController {
             'prioridad' =>  $this->request->getPost('sub_priori'),
             'fvencimiento' => $this->request->getPost('sub_fvencimiento'),
             'frecordatorio' => $this->request->getPost('sub_frecordatorio'),
+            'idresponsable' => $this->request->getPost('idresponsable'),
             'comentario' => $this->request->getPost('sub_com')
         ]);
 
-        return redirect()->to(base_url('/tareas/ver/'. $idtarea));
+        return redirect()->back();
     }
     
     public function deltarea($id) {
@@ -418,6 +448,9 @@ class Controlador extends BaseController {
     }
 
     public function actestado($id) {
+        $sesion = session();
+        $userid = $sesion->get('userid');
+
         $subM = new \App\Models\SubtareaModel();
         $tareaM = new \App\Models\TareaModel();
 
@@ -432,9 +465,16 @@ class Controlador extends BaseController {
         $idtarea = $this->request->getPost('idtarea');
         $total = $subM->where('idtarea', $idtarea)->countAllResults();
         $completadas = $subM->where('idtarea', $idtarea)->where('estado', 'c')->countAllResults();
+        $tarea = $tareaM->find($idtarea);
 
         if ($completadas === 0) {
-            $nuevoEstadoTarea = 'd'; //definida
+            if ($tarea['iddueño'] == $userid) {
+                $nuevoEstadoTarea = 'd'; // definida, solo si es dueño
+            } elseif ($completadas === $total) {
+                $nuevoEstadoTarea = 'c'; //completada
+            } else {
+                $nuevoEstadoTarea = 'p'; //en proceso
+            }
         } elseif ($completadas === $total) {
             $nuevoEstadoTarea = 'c'; //completada
         } else {
@@ -443,7 +483,7 @@ class Controlador extends BaseController {
 
         $tareaM->update($idtarea, ['estado' => $nuevoEstadoTarea]);
 
-        return redirect()->to(base_url('tareas/ver/' . $idtarea));
+        return redirect()->back();
     }
     public function filtrarestado($estado = 'p') {
         if (!session()->get('userid')) {
@@ -607,6 +647,58 @@ class Controlador extends BaseController {
             'tarea' => $tarea
         ]);
     }
+    public function get_colaboraciones($estado = 'p'){
+        $sesion = session();
+        $idcolaborador = $sesion->get('userid');
+
+        $colaboracionesM = new \App\Models\ColaboracionModel();
+        $tareaM = new \App\Models\TareaModel();
+        $subtareaM = new \App\Models\SubtareaModel();
+
+        // colaboraciones del usuario
+        $colaboraciones = $colaboracionesM->where('idcolaborador', $idcolaborador)->findAll();
+
+        // filtrado de tareas
+        $tareas = [];
+        foreach ($colaboraciones as $colab) {
+            $tarea = $tareaM
+                ->where('id', $colab['idtarea'])
+                ->where('estado', $estado)
+                ->where('archivo', 0)
+                ->first();
+
+            if ($tarea) {
+                $tarea['cantsubtareas'] = $subtareaM
+                    ->where('idtarea', $tarea['id'])
+                    ->countAllResults();
+
+                $tarea['tipocolaboracion'] = $colab['tipocolaboracion'];
+
+                $prioridad = [
+                    'b' => 'baja',
+                    'm' => 'media',
+                    'a' => 'alta'
+                ];
+                $color = [
+                    1 => '#9ac8ff',
+                    2 => '#96db9d',
+                    3 => '#ff9c9c',
+                    4 => '#ffe885',
+                    5 => '#d29fd6'
+                ];
+
+                $tarea['prioridadtxt'] = $prioridad[$tarea['prioridad']];
+                $tarea['colorcod'] = $color[$tarea['color']];
+
+                $tareas[] = $tarea;
+            }
+        }
+
+        return view('Pagina_Principal/Colaboraciones/index', [
+            'tareas' => $tareas,
+            'estadoactual' => $estado
+        ]);
+    }
 
     public function invitar_colaborador() {
         $email = $this->request->getPost('col_email');
@@ -671,6 +763,17 @@ class Controlador extends BaseController {
             return redirect()->to('/');
         }
 
+        // evita duplicar la colab si ya exista
+        $colabControl = new \App\Models\ColaboracionModel();
+        $exists = $colabControl
+            ->where('iddueno', $iddueno)
+            ->where('idcolaborador', $idcolaborador)
+            ->where('idtarea', $idtarea)
+            ->first();
+        if ($exists) {
+            return redirect()->to('/tareas/ver/' . $idtarea);
+        }
+
         $colaboracionM = new \App\Models\ColaboracionModel();
         $colaboracionM->insert([
             'iddueno' => $iddueno,
@@ -681,6 +784,88 @@ class Controlador extends BaseController {
 
         return redirect()->to(base_url("/tareas/ver/$idtarea"));
     }
+    public function colab_ver($id) {
+        if (!session()->get('userid')) {
+            return redirect()->to('/');
+        }
+
+        $sesion = session();
+        $userid = $sesion->get('userid');
+
+        $tareaM = new TareaModel();
+        $subtareaM = new SubtareaModel();
+        $colabM = new ColaboracionModel();
+        $usuarioM = new UsuarioModel();
+
+        $tarea = $tareaM->find($id);
+        if (!$tarea) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Tarea no encontrada");
+        }
+
+        $colaboradores = $colabM->where('idtarea', $id)->findAll(); //consigo todos los colaboradores
+        $responsables = ['' => 'Responsable']; //listado de colaboradores de la tarea (y el dueño)
+        $dueno = $usuarioM->find($tarea['iddueño']);
+        $responsables[$dueno['id']] = $dueno['email'];
+
+        foreach ($colaboradores as $colab) {
+            $colaborador = $usuarioM->find($colab['idcolaborador']);
+            if ($colaborador) {
+                $responsables[$colaborador['id']] = $colaborador['email'];
+            }
+        }
+
+        $colaboracion = $colabM
+            ->where('idcolaborador', $userid)
+            ->where('idtarea', $id)
+            ->first();
+        if (!$colaboracion) {
+            return redirect()->to('/tareas')->with('error', 'No tienes permiso para ver esta tarea.');
+        }
+
+        $prioridad = [
+            'b' => 'baja',
+            'm' => 'media',
+            'a' => 'alta'
+        ];
+        $estado = [ 
+            'd' => 'DEFINIDA',
+            'p' => 'EN PROCESO',
+            'c' => 'COMPLETADA'
+        ];
+        $color = [
+            1 => '#9ac8ff',
+            2 => '#96db9d',
+            3 => '#ff9c9c',
+            4 => '#ffe885',
+            5 => '#d29fd6'
+        ];
+        $tarea['prioridadtxt'] = $prioridad[$tarea['prioridad']];
+        $tarea['colorcod'] = $color[$tarea['color']];
+        $tarea['estadotxt'] = $estado[$tarea['estado']];
+
+        $subtareas = $subtareaM
+                    ->where('idtarea', $id)
+                    ->orderBy("FIELD(prioridad, 'a', 'm', 'b')", '', false)
+                    ->findAll();
+
+        foreach ($subtareas as &$sub) {
+            $sub['prioridadtxt'] = $prioridad[$sub['prioridad']];
+            if (!empty($sub['idresponsable'])) {
+                $responsable = $usuarioM->find($sub['idresponsable']);
+                $sub['responsable'] = $responsable['nombre'];
+            } else {
+                $sub['responsable'] = '';
+            }
+        }
+
+        return view('Pagina_Principal/Colaboraciones/ver', [
+            'tarea' => $tarea,
+            'subtareas' => $subtareas,
+            'tipocolaboracion' => $colaboracion['tipocolaboracion'],
+            'responsables' => $responsables
+        ]);
+    }
+
 
     public function cerrar_sesion() {
         $sesion = session();
