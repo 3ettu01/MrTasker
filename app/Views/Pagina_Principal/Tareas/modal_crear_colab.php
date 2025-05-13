@@ -17,8 +17,8 @@
                                 'placeholder' => 'Agregar email',
                                 'value' => old('col_email')
                     )); 
-                    if (session('errors.col_email')) { ?>
-                        <div class="form-text text-danger fw-bold text-end"><?= session('errors.col_email') ?></div>
+                    if (session('errors_addcoop.col_email')) { ?>
+                        <div class="form-text text-danger fw-bold text-end"><?= session('errors_addcoop.col_email') ?></div>
                     <?php } ?>
                     <span class="card-subtext"> Tipo de colaboracion </span>
                     
@@ -56,7 +56,7 @@
 <script>
     window.addEventListener('DOMContentLoaded', function () {
         <?php 
-        if (session('errors')) { ?>
+        if (session()->has('errors_addcoop')) { ?>
             var modal = new bootstrap.Modal(document.getElementById('Modalcoop'));
             modal.show();
         <?php } ?>
