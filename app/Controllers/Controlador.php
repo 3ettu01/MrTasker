@@ -418,7 +418,11 @@ class Controlador extends BaseController {
     
     public function deltarea($id) {
         $tareaM = new \App\Models\TareaModel();
+        $subM = new \App\Models\SubtareaModel();
+
+        $subM->where('idtarea', $id)->delete();
         $tareaM->delete($id);
+
 
         return redirect()->to('/');
     }
@@ -713,7 +717,7 @@ class Controlador extends BaseController {
             'col_email' => [ 'required' => 'El email es obligatorio']
         ]);
         if (!$validar->withRequest($this->request)->run()) {
-            return redirect()->back()->with('errors', $validar->getErrors());
+            return redirect()->back()->with('errors_addcoop', $validar->getErrors());
         }
 
         // verificar usuario existente
