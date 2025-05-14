@@ -36,5 +36,7 @@
         </div>
     </div>
     <?php echo view('Pagina_Principal/Perfil/form_modal_edit.php') ?>
+
+    <?= view('Pagina_Principal/toastsexito_fracaso.php') ?>
 </body>
 </html>

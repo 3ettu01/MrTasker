@@ -32,5 +32,6 @@
 
     </div>
 
+    <?= view('Pagina_Principal/toastsexito_fracaso.php') ?>
 </body>
 </html>
