@@ -49,5 +49,6 @@
     <!-- modal crear subtarea -->
     <?= view('Pagina_Principal/Tareas/form_crear_subt.php') ?>
     
+    <?= view('Pagina_Principal/toastsexito_fracaso.php') ?>
 </body>
 </html>

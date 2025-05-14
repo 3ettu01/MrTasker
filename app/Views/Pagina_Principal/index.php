@@ -55,5 +55,9 @@
 
     </div>
 
+    
+<!-- TOASTS -->
+<?= view('Pagina_Principal/toasts.php') ?>
+<?= view('Pagina_Principal/toastsexito_fracaso.php') ?>
 </body>
 </html>

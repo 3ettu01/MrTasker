@@ -61,9 +61,12 @@ class Controlador extends BaseController {
             $tarea['compartida'] = ($compartida > 0);
         }
 
+        $toasts = $this->cargar_toasts();
+
         return view('Pagina_Principal/index', [
             'tareas' => $tareas,
-            'estadoactual' => $filtroestado
+            'estadoactual' => $filtroestado,
+            'toasts' => $toasts
         ]);
     }
     public function __construct() {
@@ -136,8 +139,8 @@ class Controlador extends BaseController {
         //guardar la sesion
         $correo = $this->request->getPost('emailr');
         $user = $save_bdd->where('email',$correo)->first();
-        $session = session();
-        $session->set([
+        $sesion = session();
+        $sesion->set([
             'userid' => $user['id'],
             'usernombre' => $user['nombre'],
             'useremail' => $user['email'],
@@ -192,7 +195,7 @@ class Controlador extends BaseController {
 
         $idtarea = $save_bdd->insertID(); //obtengo el id de la tarea recien creada
 
-        return redirect()->to(base_url('/tareas/ver/'. $idtarea));
+        return redirect()->to(base_url('/tareas/ver/'. $idtarea))->with('success', 'Tarea creada correctamente!');
     }
     public function subtarea($idtarea){
         $validar = service('validation');
@@ -227,7 +230,7 @@ class Controlador extends BaseController {
         $save_bdd = new \App\Models\SubtareaModel();
         $save_bdd -> insert($datos_registro);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Subtarea creada correctamente!');
     }
     public function ver($id){
         if (!session()->get('userid')) { //control para no entrar sin sesion
@@ -374,7 +377,7 @@ class Controlador extends BaseController {
             'color' => $numeroColor
         ]);
 
-        return redirect()->to(base_url('/tareas/ver/'. $id));
+        return redirect()->to(base_url('/tareas/ver/'. $id))->with('success', 'Tarea editada correctamente!');
     }
     public function editsubtarea($id, $idtarea) {
         $validar = service('validation');
@@ -413,7 +416,7 @@ class Controlador extends BaseController {
             'comentario' => $this->request->getPost('sub_com')
         ]);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Subtarea editada correctamente!');
     }
     
     public function deltarea($id) {
@@ -424,7 +427,7 @@ class Controlador extends BaseController {
         $tareaM->delete($id);
 
 
-        return redirect()->to('/');
+        return redirect()->to('/')->with('success', 'Tarea eliminada correctamente!');
     }
     public function delsubtarea($id, $idtarea) {
         $subM = new \App\Models\SubtareaModel();
@@ -448,7 +451,7 @@ class Controlador extends BaseController {
 
         $tareaM->update($idtarea, ['estado' => $nuevoEstadoTarea]);
 
-        return redirect()->to(base_url('/tareas/ver/' . $idtarea));
+        return redirect()->to(base_url('/tareas/ver/' . $idtarea))->with('success', 'Subtarea eliminada correctamente!');
     }
 
     public function actestado($id) {
@@ -572,7 +575,7 @@ class Controlador extends BaseController {
 
         $tareaM->update($id, ['archivo' => 1]);
 
-        return redirect()->to('/Archivo');
+        return redirect()->to('/Archivo')->with('success', 'Tarea archivada correctamente!');
     }
 
     function get_index() {
@@ -724,7 +727,7 @@ class Controlador extends BaseController {
         $usuarioM = new \App\Models\UsuarioModel();
         $usuario = $usuarioM->where('email', $email)->first();
         if (!$usuario) {
-            return redirect()->back()->with('errors', ['col_email' => 'El email no pertenece a un usuario registrado']);
+            return redirect()->back()->with('errors_addcoop', ['col_email' => 'El email no pertenece a un usuario registrado']);
         }
 
         $idcolaborador = $usuario['id'];
@@ -737,7 +740,7 @@ class Controlador extends BaseController {
             ->first();
 
         if ($colabora) {
-            return redirect()->back()->with('errors', ['col_email' => 'Este usuario ya colabora en la tarea.']);
+            return redirect()->back()->with('errors_addcoop', ['col_email' => 'Este usuario ya colabora en la tarea.']);
         }
 
         // link a la colaboracion
@@ -752,10 +755,9 @@ class Controlador extends BaseController {
         Haz clic en el siguiente enlace para aceptar la invitación: <a href='{$link}'>Aceptar</a>");
 
         if ($emailService->send()) {
-            return redirect()->to(base_url('/tareas/ver/'. $idtarea));
+            return redirect()->to(base_url('/tareas/ver/'. $idtarea))->with('success', 'Invitacion enviada correctamente!');
         } else {
-            // toast error?
-            return redirect()->to(base_url('/tareas/ver/'. $idtarea));
+            return redirect()->to(base_url('/tareas/ver/'. $idtarea))->with('error', 'Ups! La invitacion no fue enviada.');
         }
     } 
     public function aceptar_colaboracion($iddueno, $idcolaborador, $idtarea, $tipo){
@@ -786,7 +788,7 @@ class Controlador extends BaseController {
             'tipocolaboracion' => $tipo
         ]);
 
-        return redirect()->to(base_url("/tareas/ver/$idtarea"));
+        return redirect()->to(base_url("/colaboraciones/ver/$idtarea"))->with('success', 'Colaboracion aceptada!');
     }
     public function colab_ver($id) {
         if (!session()->get('userid')) {
@@ -870,6 +872,76 @@ class Controlador extends BaseController {
         ]);
     }
 
+    public function cargar_toasts() {
+        $userid = session()->get('userid');
+        $tareaM = new \App\Models\TareaModel();
+        $subtareaM = new \App\Models\SubtareaModel();
+
+        $hoy = date('Y-m-d');
+        $maniana = date('Y-m-d', strtotime('+1 day'));
+
+        $toasts = [];
+
+        // TAREAS
+        $tareas = $tareaM->where('iddueño', $userid)
+            ->where('estado !=', 'c')
+            ->findAll();
+
+        foreach ($tareas as $t) {
+            $id = $t['id'];
+            $titulo = $t['tema'];
+
+            if ($t['frecordatorio'] == $hoy) {
+                $toasts[] = [
+                    'mensaje' => "🔔 Recordatorio: $titulo",
+                    'enlace' => base_url("tareas/ver/$id")
+                ];
+            } elseif ($t['fvencimiento'] == $maniana) {
+                $toasts[] = [
+                    'mensaje' => "⏰ Tu tarea '$titulo' está por vencerse",
+                    'enlace' => base_url("tareas/ver/$id")
+                ];
+            } elseif ($t['fvencimiento'] <= $hoy) {
+                $toasts[] = [
+                    'mensaje' => "⚠️ Tu tarea '$titulo' se venció. Eliminala o modifica la fecha",
+                    'enlace' => base_url("tareas/ver/$id")
+                ];
+            }
+        }
+
+        // SUBTAREAS
+        $subtareas = $subtareaM
+            ->select('subtareas.*, tareas.iddueño')
+            ->join('tareas', 'tareas.id = subtareas.idtarea')
+            ->where('tareas.iddueño', $userid)
+            ->where('subtareas.estado !=', 'c')
+            ->findAll();
+
+        foreach ($subtareas as $s) {
+            $id = $s['id'];
+            $idtarea= $s['idtarea'];
+            $titulo = $s['tema'];
+
+            if ($s['frecordatorio'] == $hoy) {
+                $toasts[] = [
+                    'mensaje' => "🔔 Recordatorio: $titulo (subtarea)",
+                    'enlace' => base_url("tareas/ver/$idtarea")
+                ];
+            } elseif ($s['fvencimiento'] == $maniana) {
+                $toasts[] = [
+                    'mensaje' => "⏰ Tu subtarea '$titulo' está por vencerse",
+                    'enlace' => base_url("tareas/ver/$idtarea")
+                ];
+            } elseif ($s['fvencimiento'] <= $hoy) {
+                $toasts[] = [
+                    'mensaje' => "⚠️ Tu subtarea '$titulo' se venció. Eliminala o modifica la fecha",
+                    'enlace' => base_url("tareas/ver/$idtarea")
+                ];
+            }
+        }
+
+        return $toasts;
+    }
 
     public function cerrar_sesion() {
         $sesion = session();
