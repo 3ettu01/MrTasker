@@ -19,10 +19,20 @@
                     $disabled = 'disabled';
                 }
                 ?>
-                <input type="checkbox" name="estado<?= $sub['id'] ?>" value="c" 
-                    class="form-check-input custom-checkbox me-2" 
-                    onchange="document.getElementById('form_actestado_<?=$sub['id']?>').submit();" 
-                    <?= $sub['estado'] === 'c' ? 'checked' : '' ?> <?= $disabled ?>>
+
+                <label class="slider">
+                    <?php if($tarea['iddueño'] == $userid): ?> <!-- control: solo dueño puede poner definida la subtarea -->
+                    <input class="sliderOption" type="radio" name="estado<?= $sub['id'] ?>" data-letter="X" value="d"
+                        onchange="document.getElementById('form_actestado_<?=$sub['id']?>').submit();"
+                        <?= $sub['estado'] === 'd' ? 'checked' : '' ?> <?= $disabled ?>>
+                    <?php endif; ?>
+                    <input class="sliderOption" type="radio" name="estado<?= $sub['id'] ?>" data-letter="···" value="p"
+                        onchange="document.getElementById('form_actestado_<?=$sub['id']?>').submit();"
+                        <?= $sub['estado'] === 'p' ? 'checked' : '' ?> <?= $disabled ?>>
+                    <input class="sliderOption" type="radio" name="estado<?= $sub['id'] ?>" data-letter="✔" value="c"
+                        onchange="document.getElementById('form_actestado_<?=$sub['id']?>').submit();"
+                        <?= $sub['estado'] === 'c' ? 'checked' : '' ?> <?= $disabled ?>>
+                </label>
 
                 <?php if ($sub['prioridad']=='a'): ?>
                     <span class="subtask-title me-2 pt-2"> <b> <?= $sub['tema'] ?> </b> <i class="bi bi-exclamation-diamond-fill"></i> </span>

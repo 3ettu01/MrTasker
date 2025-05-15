@@ -462,11 +462,9 @@ class Controlador extends BaseController {
         $tareaM = new \App\Models\TareaModel();
 
         $subtarea = $subM->find($id);
-        // if (!$subtarea) {
-        //     return redirect()->back()->with('error', 'Subtarea no encontrada');
-        // }
+        $nuevoEstado = $this->request->getPost('estado'.$id);
 
-        $nuevoEstado = $this->request->getPost('estado'.$id) === 'c' ? 'c' : 'd';
+        //actualizo el estado de la subtarea
         $subM->update($id, ['estado' => $nuevoEstado]);
 
         $idtarea = $this->request->getPost('idtarea');
@@ -475,13 +473,7 @@ class Controlador extends BaseController {
         $tarea = $tareaM->find($idtarea);
 
         if ($completadas === 0) {
-            if ($tarea['iddueño'] == $userid) {
-                $nuevoEstadoTarea = 'd'; // definida, solo si es dueño
-            } elseif ($completadas === $total) {
-                $nuevoEstadoTarea = 'c'; //completada
-            } else {
-                $nuevoEstadoTarea = 'p'; //en proceso
-            }
+            $nuevoEstadoTarea = 'd'; //definida
         } elseif ($completadas === $total) {
             $nuevoEstadoTarea = 'c'; //completada
         } else {
@@ -763,10 +755,10 @@ class Controlador extends BaseController {
     public function aceptar_colaboracion($iddueno, $idcolaborador, $idtarea, $tipo){
 
         if (!session()->has('userid')) {
-            return redirect()->to('/');
+            return redirect()->to('/')->with('error','Inicia sesion para aceptar la colaboracion');
         }
         if (session()->get('userid') != $idcolaborador) {
-            return redirect()->to('/');
+            return redirect()->to('/')->with('error','La invitacion no fue enviada a este usuario');
         }
 
         // evita duplicar la colab si ya exista

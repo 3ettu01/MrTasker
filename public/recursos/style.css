@@ -432,3 +432,62 @@ input[type="radio"]:checked + label img {
 .custom-checkbox:checked:focus {
   box-shadow: 0 0 0 0.25rem rgba(114, 28, 36, 0.25);
 }
+
+
+
+/* SLIDER: CHECK 3 STATES */
+
+label.slider     {
+    display:        inline-block;
+    box-sizing:     border-box;
+    position:       relative;
+    width:          auto;
+    height:         30px;
+    padding:        0 4px;
+    text-align:     center;
+    background:     var(--slider-background-color, rgb(233, 233, 233));
+    border:         solid medium var(--slider-border-color, rgb(43, 43, 43));
+    border-radius:  15px;
+}
+.sliderOption {
+    display:        inline-block;
+    position:       relative;
+    top:            -25%;
+    margin:         0;
+    appearance:     none;
+    width:          22px;
+    height:         22px;
+}
+.sliderOption:checked {
+    width:          25px;
+    background:		var(--slider-color, rgb(123, 179, 197));
+    height:         25px;
+    border-radius:  50%;
+    opacity:        100%;
+    transition:     background-color 0.5s;
+}
+.slider .sliderOption:first-child:checked{
+    background:     var(--slider-first-color, rgb(240, 167, 159));
+}
+.slider .sliderOption:last-child:checked{
+    background:     var(--slider-last-color, rgb(138, 190, 122));
+}
+.sliderOption:checked::after {
+    position:       relative;
+    content:        attr(value);
+    color:          var(--slider-text-color, #2A382A);
+    font-size:      10pt;
+    font-weight:    bold;
+    left:           8px;
+    top:            1.5px;
+}
+.sliderOption:checked[data-letter]::after {
+    content:        attr(data-letter);
+}
+.sliderOption:checked[data-letter=" "] {
+    left:           0px;
+    top:            0px;
+}
+.sliderOption:disabled {
+    opacity: 0.5;
+}
