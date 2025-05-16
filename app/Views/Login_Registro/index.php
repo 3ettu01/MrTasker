@@ -8,7 +8,7 @@
     <?= view('links_scripts') ?>
 
 </head>
-<body>
+<body style="overflow:hidden;">
     <div class="container-fluid p-0" id="contenedorP">
         
         <div class="row p-0" id="header"> 

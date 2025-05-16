@@ -45,7 +45,7 @@ class CustomRules
         $recordatorio = strtotime($str);
         $vencimiento = strtotime($vencimiento);
 
-        return $recordatorio < $vencimiento;
+        return $recordatorio <= $vencimiento;
     }
 
 
