@@ -9,14 +9,6 @@ use App\Models\ColaboracionModel;
 class Controlador extends BaseController {
     function index($filtroestado = 'p') {
 
-        // email test
-        // $email= \Config\Services::email();
-        // $email -> setFrom('mr.tasker.email@gmail.com','Mr. Tasker Administrador de tareas');
-        // $email->setTo('bettinaa.jp@gmail.com');
-        // $email -> setSubject('Test');
-        // $email -> setMessage('Mail test contenido');
-        // $email -> send();
-
         $sesion = session();
 
         if (!$sesion->has('userid')) {
@@ -484,30 +476,29 @@ class Controlador extends BaseController {
 
         return redirect()->back();
     }
-    public function filtrarestado($estado = 'p') {
-        if (!session()->get('userid')) {
-            return redirect()->to('/');
-        }
+    // public function filtrarestado($estado = 'p') {
+    //     if (!session()->get('userid')) {
+    //         return redirect()->to('/');
+    //     }
 
-        $tareaM = new \App\Models\TareaModel();
+    //     $tareaM = new \App\Models\TareaModel();
 
-        $tareas = $tareaM
-            ->where('userid', session()->get('userid'))
-            ->where('estado', $estado)
-            ->findAll();
+    //     $tareas = $tareaM
+    //         ->where('userid', session()->get('userid'))
+    //         ->where('estado', $estado)
+    //         ->findAll();
 
-        $estadotxt = [
-            'd' => 'definido',
-            'p' => 'en proceso',
-            'c' => 'completado'
-        ];
+    //     $estadotxt = [
+    //         'd' => 'definido',
+    //         'p' => 'en proceso',
+    //         'c' => 'completado'
+    //     ];
 
-        return view('Pagina_Principal/index', [
-            'tareas' => $tareas,
-            'estadoactual' => $estadotxt[$estado] ?? 'en proceso'
-        ]);
-
-    }
+    //     return view('Pagina_Principal/index', [
+    //         'tareas' => $tareas,
+    //         'estadoactual' => $estadotxt[$estado] ?? 'en proceso'
+    //     ]);
+    // }
     public function ordenar ($estado, $orden) {
         $sesion = session();
         if (!$sesion->has('userid')) {
@@ -516,6 +507,7 @@ class Controlador extends BaseController {
 
         $tareaM = new TareaModel();
         $subtareaM = new SubtareaModel();
+        $colabM = new \App\Models\ColaboracionModel();
 
         $query = $tareaM->where('iddueño', $sesion->get('userid'))
                         ->where('estado', $estado);
@@ -544,6 +536,11 @@ class Controlador extends BaseController {
             $tarea['cantsubtareas'] = $subtareaM->where('idtarea', $tarea['id'])->countAllResults();
             $tarea['prioridadtxt'] = $prioridad[$tarea['prioridad']];
             $tarea['colorcod'] = $color[$tarea['color']];
+
+            $compartida = $colabM
+                ->where('idtarea', $tarea['id'])
+                ->countAllResults();
+            $tarea['compartida'] = ($compartida > 0);
         }
 
         return view('Pagina_Principal/index', [
