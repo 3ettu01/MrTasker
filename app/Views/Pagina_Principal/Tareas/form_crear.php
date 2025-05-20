@@ -21,7 +21,7 @@
             <div class="row align-items-end">
                 <div class="col-2">
                 <!-- btn regresar -->
-                    <a href="<?= base_url('/Tareas') ?>" class="btn-simple fs-4"> <i class="bi bi-arrow-left-circle"></i> </a>
+                    <a href="<?= base_url('/') ?>" class="btn-simple fs-4"> <i class="bi bi-arrow-left-circle"></i> </a>
                 </div>
                 <div class="col-10 d-flex justify-content-center">
                     <h5 class="w-100 text-center">Nueva tarea</h5>
@@ -41,11 +41,11 @@
                                 'name' => 'titulo', 
                                 'class' => 'card-input2',
                                 'type' => 'text',
-                                'placeholder' => 'Titulo',
+                                'placeholder' => 'Titulo*',
                                 'value' => old('titulo')
                             )); 
                             if (session('errors.titulo')){   ?>
-                                <div class="form-text text-light text-end"><?= session('errors.titulo') ?></div>
+                                <div class="form-text text-danger fw-bold text-end"><?= session('errors.titulo') ?></div>
                             <?php } ?>
                         </div>
                         <div class="row form-floating">
@@ -53,12 +53,12 @@
                             echo form_textarea([
                                 'name' => 'desc',
                                 'class' => 'card-input2',
-                                'placeholder' => 'Descripcion',
+                                'placeholder' => 'Descripcion*',
                                 'value' => old('desc'),
-                                'rows' => 3
+                                'style' => 'height:50px'
                             ]);
                             if (session('errors.desc')) { ?>
-                                <div class="form-text text-light text-end"><?= session('errors.desc') ?></div>
+                                <div class="form-text text-danger fw-bold text-end"><?= session('errors.desc') ?></div>
                             <?php } ?>
                         </div>
                         <div>
@@ -99,7 +99,7 @@
                         </div>
                         <div class="row p-0 mt-3">
                             <div class="col me-2">
-                                <span class="mt-3">Fecha de vencimiento:</span>
+                                <span class="mt-3">Fecha de vencimiento: *</span>
                                 <?php
                                 echo form_input(array(
                                     'name' => 'fvencimiento', 
@@ -109,7 +109,7 @@
                                     'value' => old('fvencimiento')
                                 )); 
                                 if (session('errors.fvencimiento')){   ?>
-                                    <div class="form-text text-light text-end"><?= session('errors.fvencimiento') ?></div>
+                                    <div class="form-text text-danger fw-bold text-end"><?= session('errors.fvencimiento') ?></div>
                                 <?php } ?>
                             </div>
                             <div class="col ms-2">
@@ -123,15 +123,9 @@
                                     'value' => old('frecordatorio')
                                 )); 
                                 if (session('errors.frecordatorio')){   ?>
-                                    <div class="form-text text-light text-end"><?= session('errors.frecordatorio') ?></div>
+                                    <div class="form-text text-danger fw-bold text-end"><?= session('errors.frecordatorio') ?></div>
                                 <?php } ?>
                             </div>
-                        </div>
-                        <div class=>
-                            <!-- agregar subtarea -->
-                            <a href="#" role="button" class="btn-simple btn btn-link mt-3" data-bs-toggle="modal" data-bs-target="#Modalsubt">
-                                <i class="bi bi-file-earmark-plus"></i> Añadir subtarea
-                            </a>
                         </div>
                         
                     </div>
@@ -140,9 +134,9 @@
                 <div class="col-3">
                     <!-- SEGUNDA PARTE: barra lateral -->
                     <div class="menu-content" id="menu-crear" style="background-color: #f1e7e1; padding-top: 110px;">
-                        <div class="mb-4">
+                        <div class="mb-4 mt-5">
                             <!-- color -->
-                            <label class="form-label">Color de la tarea</label>
+                            <label class="form-label mt-5">Color de la tarea</label>
                             <div class="d-flex flex-wrap gap-2">
                                 <?php
                                 echo form_input([
@@ -218,19 +212,19 @@
                         </div>
 
                         <!-- colaboradores -->
-                        <div class="mb-4">
+                        <!-- <div class="mb-4">
                             <label class="form-label">Colaborar con otro usuario</label>
                             <div class="input-group mb-2">
-                                <!-- <input type="email" class="form-control" placeholder="Agregar email" name="colaborador_email">
-                                <button class="btn btn-outline-secondary" type="button" title="Agregar colaborador">
+                                <input type="email" class="form-control" placeholder="Agregar email" name="col_email">
+                                <button class="btn btn-outline-secondary" type="button">
                                     <i class="bi bi-person-plus"></i>
-                                </button> -->
+                                </button>
                             </div>
-                            <!-- <select class="form-select" name="rol_colaborador">
+                            <select class="form-select" name="rol_colaborador">
                                 <option value="participante">Participante</option>
                                 <option value="editor">Editor</option>
-                            </select> -->
-                        </div>
+                            </select>
+                        </div> -->
 
                         <!-- publicar -->
                         <div class="menu-footer mt-4">
@@ -244,8 +238,6 @@
             </div>
         <?php echo form_close(); ?>
     </div>
-    
-    <?php echo view('Pagina_Principal/Tareas/form_crear_subt') ?>
 
     <script>
     // Cambia el color de la tarjeta principal al seleccionar un color
@@ -255,14 +247,6 @@
             const cardWrapper = document.getElementById('tarea');
             cardWrapper.style.backgroundColor = color;
         });
-    });
-
-    // Copia el color de fondo del formulario principal al modal al abrirlo
-    const modalSubt = document.getElementById('Modalsubt');
-    modalSubt.addEventListener('show.bs.modal', function () {
-        const color = document.getElementById('tarea').style.backgroundColor;
-        const subtareaCard = document.getElementById('subtarea-card');
-        subtareaCard.style.backgroundColor = color;
     });
 </script>
 

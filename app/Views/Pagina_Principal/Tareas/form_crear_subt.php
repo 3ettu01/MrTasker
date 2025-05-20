@@ -3,46 +3,139 @@
         <div class="modal-content bg-transparent border-0">
             <div class="modal-body d-flex justify-content-center align-items-center p-4">
                 <!-- Contenedor -->
-                <form class="g-0 card-wrapper w-100" style="max-width: 800px;" id="subtarea-card">
-                    <h5 class="w-100 text-center">Crear subtarea</h5>
+                <?php echo form_open('form/crearsubt/'. $tarea['id'], 
+                    ['id' => 'form_crearsubt',
+                    'class' => 'g-0 card-wrapper w-100',
+                    'style' => 'max-width: 800px; background-color:'. $tarea['colorcod'] .';'
+                    ]); ?>
 
-                    <div class="row">
-                        <input type="text" placeholder="Titulo" class="card-input2" name="sub_titulo" />
+                    <h5 class="w-100 text-center">subtarea</h5>
+
+                    <div class="row px-3">
+                        <?php
+                            echo form_input(array(
+                                'name' => 'sub_titulo', 
+                                'class' => 'card-input2',
+                                'type' => 'text',
+                                'placeholder' => 'Titulo*',
+                                'value' => old('sub_titulo')
+                            )); 
+                            if (session('errors.sub_titulo')){   ?>
+                                <div class="form-text text-danger fw-bold text-end"><?= session('errors.sub_titulo') ?></div>
+                            <?php } ?>
                     </div>
-                    <div class="row form-floating">
-                        <textarea class="card-input2" placeholder="Descripcion" style="height: 100px" name="sub_desc"></textarea>
+                    <div class="row form-floating px-3">
+                        <?php
+                            echo form_textarea([
+                                'name' => 'sub_desc',
+                                'class' => 'card-input2',
+                                'placeholder' => 'Descripcion*',
+                                'value' => old('sub_desc'),
+                                'style' => 'height:100px'
+                            ]);
+                            if (session('errors.sub_desc')) { ?>
+                                <div class="form-text text-danger fw-bold text-end"><?= session('errors.sub_desc') ?></div>
+                            <?php } ?>
                     </div>
                     <div>
-                        <div>Prioridad</div>
-                        <input type="radio" class="btn-check" name="sub_priori" id="sb" autocomplete="off" checked>
-                        <label class="btn btn-textcheck" for="sb">Baja</label>
+                        <div class="pt-2">Prioridad</div>
+                        <?php
+                            echo form_input([
+                                'type' => 'radio',
+                                'name' => 'sub_priori',
+                                'class' => 'btn-check',
+                                'id' => 'sb',
+                                'value' => 'b',
+                                'autocomplete' => 'off',
+                                'checked'     => (old('sub_priori') === 'b' || old('sub_priori') === null)
+                            ]);
+                            echo form_label('Baja', 'sb', ['class' => 'btn btn-textcheck']); ?>
 
-                        <input type="radio" class="btn-check" name="sub_priori" id="sm" autocomplete="off">
-                        <label class="btn btn-textcheck" for="sm">Media</label>
+                            <?php
+                            echo form_input([
+                                'type' => 'radio',
+                                'name' => 'sub_priori',
+                                'class' => 'btn-check',
+                                'id' => 'sm',
+                                'value' => 'm',
+                                'autocomplete' => 'off'
+                            ]);
+                            echo form_label('Media', 'sm', ['class' => 'btn btn-textcheck']); ?>
 
-                        <input type="radio" class="btn-check" name="sub_priori" id="sa" autocomplete="off">
-                        <label class="btn btn-textcheck" for="sa">Alta</label>
+                            <?php
+                            echo form_input([
+                                'type' => 'radio',
+                                'name' => 'sub_priori',
+                                'class' => 'btn-check',
+                                'id' => 'sa',
+                                'value' => 'a',
+                                'autocomplete' => 'off'
+                            ]);
+                            echo form_label('Alta', 'sa', ['class' => 'btn btn-textcheck']); ?>
                     </div>
                     <div class="row p-0 mt-3">
                         <div class="col me-2">
                             <span>Fecha de vencimiento:</span>
-                            <input type="date" class="form-control card-input2" name="sub_fvencimiento">
+                            <?php
+                                echo form_input(array(
+                                    'name' => 'sub_fvencimiento', 
+                                    'class' => 'm-0 form-control card-input2',
+                                    'type' => 'date',
+                                    'value' => old('sub_fvencimiento')
+                                )); 
+                                if (session('errors.sub_fvencimiento')){   ?>
+                                    <div class="form-text text-danger fw-bold text-end"><?= session('errors.sub_fvencimiento') ?></div>
+                                <?php } ?>
                         </div>
                         <div class="col ms-2">
                             <span>Fecha de recordatorio:</span>
-                            <input type="date" class="form-control card-input2" name="sub_frecordatorio">
+                            <?php
+                                echo form_input(array(
+                                    'name' => 'sub_frecordatorio', 
+                                    'class' => 'm-0 form-control card-input2',
+                                    'type' => 'date',
+                                    'value' => old('sub_frecordatorio')
+                                )); 
+                                if (session('errors.sub_frecordatorio')){   ?>
+                                    <div class="form-text text-danger fw-bold text-end"><?= session('errors.sub_frecordatorio') ?></div>
+                                <?php } ?>
                         </div>
                     </div>
-                    <div class="row form-floating">
-                        <textarea class="card-input2" placeholder="Comentarios adicionales" style="height: 50px" name="sub_com"></textarea>
+                    <div class="row form-floating px-3">
+                        <?php
+                            echo form_textarea([
+                                'name' => 'sub_com',
+                                'class' => 'card-input2',
+                                'placeholder' => 'Comentarios adicionales',
+                                'value' => old('sub_com'),
+                                'style' => 'height:50px'
+                            ]);
+                        ?>
                     </div>
-                    <div class="row d-flex justify-content-center">
-                        <button type="submit" class="card-button w-100 text-white" style="background-color: #802b1a;">
-                            Añadir subtarea
+                    <div>
+                        <?php
+                        echo form_dropdown('idresponsable', $responsables, old('idresponsable'), [
+                            'class' => 'card-input2'
+                        ]);
+                        ?>
+                    </div>
+                    <div class="row d-flex justify-content-center mt-3">
+                        <button type="submit" class="card-button text-white" onclick="document.getElementById('form_crearsubt').submit();" style="background-color: #802b1a;">
+                            Añadir
                         </button>
                     </div>
-                </form>
+                <?php echo form_close(); ?>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    window.addEventListener('DOMContentLoaded', function () {
+    <?php 
+    if (session('errors.sub_titulo')||session('errors.sub_desc')||session('errors.sub_fvencimiento')||session('errors.sub_frecordatorio')) { ?>
+        var modal = new bootstrap.Modal(document.getElementById('Modalsubt'));
+        modal.show();
+    <?php }  ?>
+});
+</script>

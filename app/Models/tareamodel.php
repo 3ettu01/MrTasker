@@ -8,7 +8,7 @@ class TareaModel extends Model {
     protected $useAutoIncrement = true; 
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
-    protected $allowedFields = ['id', 'iddueño', 'tema', 'descripcion', 'prioridad', 'estado', 'frecordatorio', 'fvencimiento', 'color'];
+    protected $allowedFields = ['id', 'iddueño', 'tema', 'descripcion', 'prioridad', 'estado', 'frecordatorio', 'fvencimiento', 'color', 'archivo'];
     protected $useTimestamps = false; // Dates
     protected $dateFormat = 'datetime';
     protected $createdField = 'created_at';

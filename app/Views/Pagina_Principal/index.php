@@ -22,73 +22,32 @@
             
             <div class="task-header d-flex align-items-center justify-content-between px-3 py-2">
                 <div class="task-tabs d-flex align-items-center">
-                    <a href="#" class="task-tab">DEFINIDO</a>
-                    <a href="#" class="task-tab">EN PROCESO</a>
-                    <a href="#" class="task-tab">FINALIZADO</a>
-                    <?php
-                    // href:  base_url('tareas/definido') 
-                    // class:  ($estado_actual == 'definido') ? 'active' : '' 
-                    ?>
+                    <a href="<?= base_url('tareas/estado/d') ?>" class="task-tab <?= ($estadoactual == 'd') ? 'active' : '' ?>">DEFINIDO</a>
+                    <a href="<?= base_url('tareas/estado/p') ?>" class="task-tab <?= ($estadoactual == 'p') ? 'active' : '' ?>">EN PROCESO</a>
+                    <a href="<?= base_url('tareas/estado/c') ?>" class="task-tab <?= ($estadoactual == 'c') ? 'active' : '' ?>">COMPLETADO</a>
                 </div>
+
                 <div class="task-filter">
-                    <button class="btn btn-light">
-                    <i class="bi bi-funnel-fill"></i>
-                    </button>
+                    <!-- <button class="btn btn-light">
+                        <i class="bi bi-list-task"></i>
+                    </button> -->
+                    <a class="btn btn-light dropdown-toggle fs-5" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-list-task"></i>
+                    </a>
+                    
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="<?= base_url('tareas/ordenar/' . $estadoactual . '/recientes') ?>">Vencimiento lejano</a></li>
+                        <li><a class="dropdown-item" href="<?= base_url('tareas/ordenar/' . $estadoactual . '/antiguos') ?>">Vencimiento proximo</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="<?= base_url('tareas/ordenar/' . $estadoactual . '/prioridadalta') ?>">Mayor prioridad</a></li>
+                        <li><a class="dropdown-item" href="<?= base_url('tareas/ordenar/' . $estadoactual . '/prioridadbaja') ?>">Menor prioridad</a></li>
+                    </ul>
                 </div>
             </div>
 
             <div class="pt-5" id="taskslist">
 
-                
-                <div class="card-design p-3"> <!-- modelo task -->
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="d-flex align-items-center">
-                            <input class="form-check-input custom-checkbox" type="checkbox" id="task">
-                            <div>
-                                <span class="ms-3 task-title">Tarea de prueba</span>
-                                <span class="card-subtext">- asignada a Tofi</span>
-                            </div>
-                        </div>
-                        <i class="bi bi-pencil fs-5"></i> 
-                    </div>
-
-                    <div class="card-subtext mt-1">prioridad x</div>
-
-                    <p class="mt-2 mb-3 text-dark">
-                        Descripción 
-                    </p>
-
-                    <div class="d-flex justify-content-between">
-                        <span class="card-subtext">Recordatorio para el xx/xx/xx</span>
-                        <span class="card-subtext">Vence el xx/xx/xx</span>
-                    </div>
-
-                    <!-- subtareas -->
-                    <hr>
-                    <div class="ms-4 mt-2">
-                        <div class="mb-3">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div class="d-flex align-items-center">
-                                <input class="form-check-input custom-checkbox" type="checkbox" id="subtask1">
-                                <div>
-                                    <span class="ms-2 subtask-title">Subtarea x</span>
-                                    <span class="card-subtext">- asignada a Milo</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-subtext mt-1">prioridad x</div>
-                        <p class="mt-1 mb-1 text-dark">Descripción</p>
-                        <div class="d-flex justify-content-between">
-                            <span class="card-subtext">Recordatorio para el xx/xx/xx</span>
-                            <span class="card-subtext">Vence el xx/xx/xx</span>
-                        </div>
-                    </div>
-
-                </div> <!-- fin modelo task -->
-
-                
-
-
+                <?= view('Pagina_Principal/cargar_tareas.php') ?>
 
             </div>
 
@@ -96,5 +55,9 @@
 
     </div>
 
+    
+<!-- TOASTS -->
+<?= view('Pagina_Principal/toasts.php') ?>
+<?= view('Pagina_Principal/toastsexito_fracaso.php') ?>
 </body>
 </html>

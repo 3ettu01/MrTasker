@@ -8,7 +8,7 @@
     <?= view('links_scripts') ?>
 
 </head>
-<body>
+<body style="overflow:hidden;">
     <div class="container-fluid p-0" id="contenedorP">
         
         <div class="row p-0" id="header"> 
@@ -27,8 +27,10 @@
 
         </div>
 
-        <div class="row my-4 card-design d-flex justify-content-center mx-auto">
-            hi
+        <div class="my-4 card-design d-flex justify-content-center mx-auto p-5">
+            <img src="<?= base_url('public/recursos/img/1.jpg'); ?>" width="350" class="m-3">
+            <img src="<?= base_url('public/recursos/img/2.jpg'); ?>" width="350" class="m-3">
+            <img src="<?= base_url('public/recursos/img/3.jpg'); ?>" width="350" class="m-3">
         </div>
 
     </div>
